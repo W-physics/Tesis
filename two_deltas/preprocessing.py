@@ -1,11 +1,13 @@
+import torch
+
 from torch.utils.data import TensorDataset
 from torch.utils.data import DataLoader
 from sklearn.model_selection import train_test_split
 
 def CreateDataloader(data,target):
 
-  data_tensor = torch.tensor(data, dtype=torch.float32).reshape(-1,1)
-  target_tensor = torch.tensor(target, dtype=torch.float32).reshape(-1,1)
+  data_tensor = torch.tensor(data, dtype=torch.float32)
+  target_tensor = torch.tensor(target, dtype=torch.float32)
 
   data_ds = TensorDataset(data_tensor,target_tensor)
   data_dl = DataLoader(data_ds, batch_size=1, shuffle=True)

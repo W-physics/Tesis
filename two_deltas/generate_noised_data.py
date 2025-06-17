@@ -6,17 +6,17 @@ def GenerateTwoDeltas(Ndata):
 
 def ForwardProcess(initial_data, drift_term, noise_level):
 
-    Ndata = len(initial_data)
+    ndata = len(initial_data)
+    noised_data = np.zeros(ndata)
+    noise = np.zeros(ndata)
 
-    noised_data = np.zeros(Ndata)
-    noise = np.zeros(Ndata)
+    for i in range(ndata):
 
-    for i in range(Ndata):
+        time = np.random.randint(1000)
+        noise[i] = np.random.normal(0,1)
+        temperature_list = [(1-drift_term)**(j) for j in range(time+1)]
 
-        noise[i] = np.random.normal(loc=0.0, scale=1)
-        temperature_list = (1 - drift_term)**[np.arange(i - 1)]
-
-        noised_data[i] = initial_data * (1 - drift_term)**(i) + np.sqrt(2*noise_level)*noise[i]*np.sum(temperature_list)
+        noised_data[i] = initial_data[i] * (1 - drift_term)**(time) + np.sqrt(2*noise_level)*noise[i]*np.sum(temperature_list)
 
     return  noised_data, noise
 

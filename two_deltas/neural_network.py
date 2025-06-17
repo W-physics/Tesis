@@ -20,10 +20,7 @@ class FeedForward(nn.Module):
     #    try:
     self.model_list = nn.ModuleList(l)
 
-#        except:
-#         print(l)
-
-  def Forward(self,x):
+  def forward(self,x):
     for layer in self.model_list:
       x = layer(x)
     return x
