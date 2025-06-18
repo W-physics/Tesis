@@ -1,19 +1,11 @@
 import torch
 import torch.nn as nn
-import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 
 from two_deltas.neural_network import FeedForward
-from two_deltas.generate_noised_data import GenerateTwoDeltas, GenerateNoisedData
-from two_deltas.preprocessing import Preprocessing, CreateDataloader
-
-def SaveCheckpoint(checkpoint):
-   torch.save(checkpoint, 'data\checkpoint.pth.tar')
-
-def SaveCSV(data, name):
-   df_data = pd.DataFrame(data)
-   df_data.to_csv("data\d-" + name + ".csv")
+from two_deltas.generate_noised_data import GenerateNoisedData
+from two_deltas.preprocessing import Preprocessing
+from save_plot.save_files import SaveCheckpoint, SaveCSV
 
 def Train(model,num_epochs,train_dl,valid_dl, patience=5, min_delta=0.001):
     
@@ -75,18 +67,17 @@ def Train(model,num_epochs,train_dl,valid_dl, patience=5, min_delta=0.001):
 
     return loss_hist_train, loss_hist_valid
 
-def TrainModel():
+def TrainTwoDeltas(drift_term, noise_level):
 
   model = FeedForward(input_size=1,output_size=1,n_hidden_layers=2,depht=5)
 
-  noised_data, noise = GenerateNoisedData(drift_term=0.1, noise_level=0.1)
+  noised_data, noise = GenerateNoisedData(drift_term, noise_level)
   train_dl, valid_dl, test_dl = Preprocessing(noised_data, noise)
 
   loss_hist_train,loss_hist_valid = Train(model=model, num_epochs=50,
                                            train_dl=train_dl, valid_dl=valid_dl)
   
   #Save the model parameters
-
   checkpoint = {'model_state_dict': model.state_dict()}
   #'optimizer_state_dict': optimizer.state_dict()}
   
@@ -96,4 +87,3 @@ def TrainModel():
 
 #  return model, loss_hist_train, loss_hist_valid, test_dl
 
-TrainModel()

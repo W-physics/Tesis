@@ -1,0 +1,7 @@
+#ignore all the csv files
+
+*.csv
+
+#ignore all the pdf files
+
+*.pdf
