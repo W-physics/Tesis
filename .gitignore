@@ -5,3 +5,5 @@
 #ignore all the pdf files
 
 *.pdf
+
+venv
