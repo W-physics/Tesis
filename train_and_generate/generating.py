@@ -2,6 +2,7 @@ import numpy as np
 import torch
 
 from two_deltas.neural_network import FeedForward
+from two_deltas.generate_noised_data import BetaSchedule
 
 from save_plot.save_files import SaveCSV
 
@@ -15,22 +16,23 @@ def GetModel():
     
     return model
 
-def Generate(drift_term, noise_level):
+def Generate():
 
     ndata = 10000
-    timesteps = 1000
-    pure_noise = np.random.normal(0,1,ndata)
+    timesteps = 300
+    
+    beta = BetaSchedule(timesteps)
 
     distros = np.zeros((timesteps,ndata))
-    distros[0] = pure_noise
+    distros[0] = np.random.normal(0, 1, ndata)
 
     model = GetModel()
 
     for t in range(1,timesteps):
 
         previous_t = torch.tensor(distros[t-1],dtype=torch.float32).reshape(-1,1)
-        noise = np.sqrt(2*noise_level) * np.random.normal(0,1,ndata)
-        deterministic = (1 - drift_term) * previous_t - 2 * noise_level * model(previous_t)
+        noise =  np.sqrt(beta[t]) * np.random.normal(0,1,ndata)
+        deterministic = np.sqrt(beta[t]) * model(previous_t) + previous_t * (1 - 0.5* beta[t])
         deterministic_np = deterministic.detach().numpy().reshape(noise.shape)
         distros[t] = deterministic_np + noise
 
