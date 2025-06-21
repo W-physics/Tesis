@@ -1,32 +1,22 @@
 import numpy as np
 import torch
 
-from two_deltas.neural_network import FeedForward
-from two_deltas.generate_noised_data import BetaSchedule
+from forward_process.neural_network import FeedForward
+from forward_process.generate_noised_data import BetaSchedule
+from train_and_generate.training_nn import TrainModel
 
 from save_plot.save_files import SaveCSV
 
-def GetModel():
-
-    model = FeedForward(input_size=1,output_size=1,n_hidden_layers=2,depht=5)
-    checkpoint = torch.load("data/checkpoint.pth.tar")
-    model.load_state_dict(checkpoint['model_state_dict'])
-
-    model.eval()
-    
-    return model
-
-def Generate():
-
-    ndata = 10000
-    timesteps = 300
+def Generate(initial_distribution, ndata, timesteps):
     
     beta = BetaSchedule(timesteps)
 
     distros = np.zeros((timesteps,ndata))
     distros[0] = np.random.normal(0, 1, ndata)
 
-    model = GetModel()
+    model = TrainModel(initial_distribution)
+
+    print("Backward process started...")
 
     for t in range(1,timesteps):
 

@@ -2,10 +2,10 @@ import torch
 import torch.nn as nn
 import numpy as np
 
-from two_deltas.neural_network import FeedForward
-from two_deltas.generate_noised_data import GenerateNoisedData
-from two_deltas.preprocessing import Preprocessing
-from save_plot.save_files import SaveCheckpoint, SaveCSV
+from forward_process.neural_network import FeedForward
+from forward_process.generate_noised_data import GenerateNoisedData
+from forward_process.preprocessing import Preprocessing
+from save_plot.save_files import SaveCSV
 
 def Train(model,num_epochs,train_dl,valid_dl, patience=5, min_delta=0.001):
     
@@ -67,23 +67,24 @@ def Train(model,num_epochs,train_dl,valid_dl, patience=5, min_delta=0.001):
 
     return loss_hist_train, loss_hist_valid
 
-def TrainTwoDeltas():
+def TrainModel(initial_distribution):
 
   model = FeedForward(input_size=1,output_size=1,n_hidden_layers=2,depht=5)
 
-  noised_data, noise = GenerateNoisedData(10000)
+  noised_data, noise = GenerateNoisedData(10000, initial_distribution)
   train_dl, valid_dl, test_dl = Preprocessing(noised_data, noise)
 
   loss_hist_train,loss_hist_valid = Train(model=model, num_epochs=50,
                                            train_dl=train_dl, valid_dl=valid_dl)
   
   #Save the model parameters
-  checkpoint = {'model_state_dict': model.state_dict()}
+  #checkpoint = {'model_state_dict': model.state_dict()}
   #'optimizer_state_dict': optimizer.state_dict()}
   
-  SaveCheckpoint(checkpoint)
+  #SaveCheckpoint(checkpoint)
   SaveCSV(loss_hist_train, "loss_hist_train")
   SaveCSV(loss_hist_valid, "loss_hist_valid")
 
+  return model
 #  return model, loss_hist_train, loss_hist_valid, test_dl
 

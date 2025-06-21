@@ -1,9 +1,5 @@
 import numpy as np
 
-def GenerateTwoDeltas(Ndata): 
-
-    return np.concatenate([np.ones(Ndata//2),-np.ones(Ndata//2)])
-
 def BetaSchedule(n_steps, start=1e-4, end=0.02):
     """
     Generates a beta schedule for the forward process.
@@ -29,8 +25,10 @@ def ForwardProcess(initial_data):
 
     return  noised_data, noise
 
-def GenerateNoisedData(ndata):
+def GenerateNoisedData(ndata, initial_distribution):
 
-    data = GenerateTwoDeltas(ndata)
+    data = initial_distribution(ndata)
+
+    print("forward process started...")
     
     return ForwardProcess(data)
