@@ -14,7 +14,7 @@ def Generate(initial_distribution, ndata, timesteps):
     distros = np.zeros((timesteps,ndata))
     distros[0] = np.random.normal(0, 1, ndata)
 
-    model = TrainModel(initial_distribution)
+    model = TrainModel(ndata, initial_distribution)
 
     print("Backward process started...")
 

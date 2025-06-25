@@ -1,3 +1,5 @@
+from critical.control_parameter import Theta
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -40,3 +42,24 @@ def PlotViolin(iter):
     fig.savefig("figures/violin_plot"+str(iter)+".pdf")
 
     print(f"Violin plot of generated data plotted and saved to figures/violin_plot{iter}.pdf")
+
+
+def PlotConsistency(time, timesteps):
+
+    theta = Theta(time, timesteps)
+
+    x = np.linspace(-1, 1, 100)
+
+    right_side = (1 + theta**2) / (1 - theta**2) * x
+    left_side = 2 * theta * np.tanh(x* theta / (1 - theta**2))
+
+    fig, ax = plt.subplots()
+    ax.set_title(f"Plot of the consistency equation with theta = {theta:.2f}")
+
+    ax.plot(x, right_side, label="right_side")
+    ax.plot(x, left_side, label="left_side")
+    ax.legend(fontsize='large')
+
+    fig.savefig("figures/consistency_plot.pdf")
+
+    
