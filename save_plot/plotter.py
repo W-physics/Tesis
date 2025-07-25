@@ -1,4 +1,4 @@
-from critical.control_parameter import Theta
+#from critical.control_parameter import Theta
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -40,10 +40,39 @@ def PlotViolin(iter):
     ax.violinplot(reduced_distros.T,positions=separation*np.arange(size),widths=25)
 
     fig.savefig("figures/violin_plot"+str(iter)+".pdf")
+    
 
     print(f"Violin plot of generated data plotted and saved to figures/violin_plot{iter}.pdf")
 
 
+def PlotCritical(ndata):
+
+    critical_time = 121
+    ymin = -20
+    ymax = 20
+
+    generated = pd.read_csv("data/generated_data.csv", header=None).to_numpy()
+    separation = 25
+    reduced_distros = generated[::separation]
+
+    fig, ax = plt.subplots()
+    ax.set_ylabel(r"$x_{t}$")
+    ax.set_xlabel(r"$t$")
+    ax.set_title("Violin plot of critical time n = "+str(ndata))
+    #ax.set_xlim(75,175)
+    ax.set_ylim(ymin,ymax)
+
+    size = len(reduced_distros)
+    ax.vlines(critical_time, ymin=ymin, ymax=ymax, colors="red", linestyles='dashed', label='critical time')
+
+    ax.violinplot(reduced_distros.T,positions=separation*np.arange(size),widths=15)
+    ax.legend(fontsize='large')
+
+    fig.savefig("figures/critical_time/n="+str(ndata)+".pdf")
+
+    print(f"Violin plot of critical time n = {ndata} plotted and saved to figures/critical_time/n={ndata}.pdf")
+
+'''
 def PlotConsistency(time, timesteps):
 
     theta = Theta(time, timesteps)
@@ -61,5 +90,4 @@ def PlotConsistency(time, timesteps):
     ax.legend(fontsize='large')
 
     fig.savefig("figures/consistency_plot.pdf")
-
-    
+''' 

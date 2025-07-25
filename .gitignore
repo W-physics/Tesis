@@ -4,8 +4,6 @@
 
 #ignore all the pdf files
 
-*.pdf
-
 *.tar
 
 venv
