@@ -16,7 +16,7 @@ def TrainGenerate():
         Generate(GenerateTwoDeltas,
              n,
              timesteps)
-    #PlotTrainval(iter)
+        PlotTrainval(n)
     #PlotViolin(iter)
         PlotCritical(n)
  

@@ -1,4 +1,6 @@
 #from critical.control_parameter import Theta
+from train_and_generate.correlation import Get_correlations
+
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -19,9 +21,9 @@ def PlotTrainval(iter):
     ax.plot(loss_hist_valid,label='valid')
     ax.legend(fontsize='large')
 
-    fig.savefig('figures/losses'+str(iter)+'.pdf')
+    fig.savefig('figures/losses'+str(iter)+'.svg')
 
-    print(f"Training and validation losses plotted and saved to figures/losses{iter}.pdf")
+    print(f"Training and validation losses plotted and saved to figures/losses{iter}.svg")
 
 def PlotViolin(iter):
 
@@ -31,15 +33,15 @@ def PlotViolin(iter):
     reduced_distros = generated[::separation]
 
     fig, ax = plt.subplots()
-    ax.set_ylabel(r"$x_{t}$")
-    ax.set_xlabel(r"$t$")
+    ax.set_ylabel(r"$x_{s}$")
+    ax.set_xlabel(r"$s$")
     ax.set_title("Violin plot of generated data via backward process")
 
     size = len(reduced_distros)
 
     ax.violinplot(reduced_distros.T,positions=separation*np.arange(size),widths=25)
 
-    fig.savefig("figures/violin_plot"+str(iter)+".pdf")
+    fig.savefig("figures/violin_plot"+str(iter)+".svg")
     
 
     print(f"Violin plot of generated data plotted and saved to figures/violin_plot{iter}.pdf")
@@ -47,7 +49,7 @@ def PlotViolin(iter):
 
 def PlotCritical(ndata):
 
-    critical_time = 121
+    critical_time = 300 - 121
     ymin = -20
     ymax = 20
 
@@ -55,9 +57,10 @@ def PlotCritical(ndata):
     separation = 25
     reduced_distros = generated[::separation]
 
+
     fig, ax = plt.subplots()
-    ax.set_ylabel(r"$x_{t}$")
-    ax.set_xlabel(r"$t$")
+    ax.set_ylabel(r"$x_{s}$")
+    ax.set_xlabel(r"$s$")
     ax.set_title("Violin plot of critical time n = "+str(ndata))
     #ax.set_xlim(75,175)
     ax.set_ylim(ymin,ymax)
@@ -68,9 +71,23 @@ def PlotCritical(ndata):
     ax.violinplot(reduced_distros.T,positions=separation*np.arange(size),widths=15)
     ax.legend(fontsize='large')
 
-    fig.savefig("figures/critical_time/n="+str(ndata)+".pdf")
+    fig.savefig("figures/critical_time/n="+str(ndata)+".svg")
 
     print(f"Violin plot of critical time n = {ndata} plotted and saved to figures/critical_time/n={ndata}.pdf")
+
+
+    correlations = Get_correlations(generated)
+
+    fig2, ax2 = plt.subplots()
+
+    ax2.set_ylabel(r"$D_{s}$")
+    ax2.set_xlabel(r"$s$")
+    ax2.set_title("Correlations at n = "+str(ndata))
+    ax2.plot(correlations)
+
+    fig2.savefig("figures/critical_time/correlations_n="+str(ndata)+".svg")
+
+    print(f"Correlations at critical time n = {ndata} plotted and saved to figures/critical_time/correlations_n={ndata}.pdf")
 
 '''
 def PlotConsistency(time, timesteps):

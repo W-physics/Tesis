@@ -3,6 +3,5 @@ from save_plot.plotter import PlotCritical
 
 def main():
     TrainGenerate()
-    #PlotCritical(0)
 
 main()
