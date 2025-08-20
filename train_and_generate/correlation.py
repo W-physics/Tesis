@@ -2,7 +2,7 @@ import numpy as np
 
 import pandas as pd
 
-def Get_correlations(array):
+def GetCorrelations(array):
 
     corr = np.zeros(len(array))
     ndata = len(array[0])

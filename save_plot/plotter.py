@@ -1,5 +1,5 @@
 #from critical.control_parameter import Theta
-from train_and_generate.correlation import Get_correlations
+from train_and_generate.correlation import GetCorrelations
 
 
 import pandas as pd
@@ -42,7 +42,7 @@ def PlotCritical(ndata):
     ax.set_xlabel(r"$s$")
     ax.set_title("Violin plot of critical time n = "+str(ndata))
     #ax.set_xlim(75,175)
-    ax.set_ylim(ymin,ymax)
+    #ax.set_ylim(ymin,ymax)
 
     size = len(reduced_distros)
     ax.vlines(critical_time, ymin=ymin, ymax=ymax, colors="red", linestyles='dashed', label='critical time')
@@ -55,7 +55,7 @@ def PlotCritical(ndata):
     print(f"Violin plot of critical time n = {ndata} plotted and saved to figures/violin_plots/n={ndata}.pdf")
 
 
-    correlations = Get_correlations(generated)
+    correlations = GetCorrelations(generated)
 
     fig2, ax2 = plt.subplots()
 
