@@ -13,9 +13,7 @@ def TrainGenerate():
 
     for n in ndata:
 
-        Generate(GenerateTwoDeltas,
-             n,
-             timesteps)
+        Generate(GenerateTwoDeltas, timesteps, n)
         PlotTrainval(n)
         PlotCritical(n)
  

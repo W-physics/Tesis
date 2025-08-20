@@ -67,11 +67,11 @@ def Train(model,num_epochs,train_dl,valid_dl, patience=5, min_delta=0.001):
 
     return loss_hist_train, loss_hist_valid
 
-def TrainModel(ndata, initial_distribution):
+def TrainModel(timesteps, ndata, initial_distribution):
 
   model = FeedForward(input_size=1,output_size=1,n_hidden_layers=2,depht=5)
 
-  noised_data, noise = GenerateNoisedData(ndata, initial_distribution)
+  noised_data, noise = GenerateNoisedData(timesteps, ndata, initial_distribution)
   train_dl, valid_dl, test_dl = Preprocessing(noised_data, noise)
 
   loss_hist_train,loss_hist_valid = Train(model=model, num_epochs=50,

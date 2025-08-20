@@ -7,14 +7,14 @@ from train_and_generate.training_nn import TrainModel
 
 from save_plot.save_files import SaveCSV
 
-def Generate(initial_distribution, ndata, timesteps):
+def Generate(initial_distribution, timesteps, ndata):
     
     beta = BetaSchedule(timesteps)
 
     distros = np.zeros((timesteps,ndata))
     distros[0] = np.random.normal(0, 1, ndata)
 
-    model = TrainModel(ndata, initial_distribution)
+    model = TrainModel(timesteps, ndata, initial_distribution)
 
     print("Backward process started...")
 

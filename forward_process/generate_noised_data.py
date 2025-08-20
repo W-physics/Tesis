@@ -6,12 +6,12 @@ def BetaSchedule(n_steps, start=1e-4, end=0.02):
     """
     return np.linspace(start, end, n_steps)
 
-def ForwardProcess(initial_data):
+def ForwardProcess(timesteps, initial_data):
 
     ndata = len(initial_data)
     noised_data = np.zeros(ndata)
     noise = np.zeros(ndata)
-    beta = BetaSchedule(n_steps=1000)
+    beta = BetaSchedule(timesteps)
 
     for i in range(ndata):
 
@@ -25,10 +25,10 @@ def ForwardProcess(initial_data):
 
     return  noised_data, noise
 
-def GenerateNoisedData(ndata, initial_distribution):
+def GenerateNoisedData(timesteps, ndata, initial_distribution):
 
     data = initial_distribution(ndata)
 
     print("forward process started...")
     
-    return ForwardProcess(data)
+    return ForwardProcess(timesteps, data)
