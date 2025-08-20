@@ -29,8 +29,8 @@ def PlotTrainval(ndata):
 def PlotCritical(ndata):
 
     critical_time = 300 - 121
-    ymin = -20
-    ymax = 20
+    ymin = -5
+    ymax = 5
 
     generated = pd.read_csv("data/generated_data.csv", header=None).to_numpy()
     separation = 25

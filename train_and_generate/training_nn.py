@@ -74,7 +74,7 @@ def TrainModel(timesteps, ndata, initial_distribution):
   noised_data, noise = GenerateNoisedData(timesteps, ndata, initial_distribution)
   train_dl, valid_dl, test_dl = Preprocessing(noised_data, noise)
 
-  loss_hist_train,loss_hist_valid = Train(model=model, num_epochs=50,
+  loss_hist_train,loss_hist_valid = Train(model=model, num_epochs=100,
                                            train_dl=train_dl, valid_dl=valid_dl)
   
   #Save the model parameters

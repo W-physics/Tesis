@@ -8,6 +8,12 @@ from train_and_generate.training_nn import TrainModel
 from save_plot.save_files import SaveCSV
 
 def Generate(initial_distribution, timesteps, ndata):
+
+    """
+    Emulates the backward process of a diffusion model to generate data. The 
+    dynamics of the data for each timestep is stored in an array called distros
+    (shape=(timesteps, ndata)). The first row is filled with random noise.
+    """
     
     beta = BetaSchedule(timesteps)
 
@@ -20,11 +26,10 @@ def Generate(initial_distribution, timesteps, ndata):
 
     for t in range(1,timesteps):
 
-        previous_t = torch.tensor(distros[t-1],dtype=torch.float32).reshape(-1,1)
+        previous_distro = torch.tensor(distros[t-1],dtype=torch.float32).reshape(-1,1)
+        guessed_noise = model(previous_distro).detach().numpy().reshape(-1,1)
         noise =  np.sqrt(beta[t]) * np.random.normal(0,1,ndata)
-        deterministic = np.sqrt(beta[t]) * model(previous_t) + previous_t * (1 - 0.5* beta[t])
-        deterministic_np = deterministic.detach().numpy().reshape(noise.shape)
-        distros[t] = deterministic_np + noise
+        distros[t] = distros[t-1] * (1 + 0.5 * beta[t]) + np.sqrt(beta[t]) * (noise - guessed_noise.flatten())
 
     SaveCSV(distros, "generated_data")
 

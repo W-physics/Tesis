@@ -7,6 +7,12 @@ def BetaSchedule(n_steps, start=1e-4, end=0.02):
     return np.linspace(start, end, n_steps)
 
 def ForwardProcess(timesteps, initial_data):
+    
+    """
+    Generates noised data using the forward process. Takes one random timestep
+    generate a 1D noised data and store it in the noised_data array. This is repeated
+    for each data point in the initial_data array.
+    """
 
     ndata = len(initial_data)
     noised_data = np.zeros(ndata)
