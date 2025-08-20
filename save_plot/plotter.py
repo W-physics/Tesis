@@ -6,7 +6,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-def PlotTrainval(iter):
+def PlotTrainval(ndata):
 
     loss_hist_train = pd.read_csv("data/loss_hist_train.csv", header=None).to_numpy()
     loss_hist_valid = pd.read_csv("data/loss_hist_valid.csv", header=None).to_numpy()
@@ -21,9 +21,9 @@ def PlotTrainval(iter):
     ax.plot(loss_hist_valid,label='valid')
     ax.legend(fontsize='large')
 
-    fig.savefig('figures/losses'+str(iter)+'.svg')
+    fig.savefig('figures/losses/'+str(ndata)+'.svg')
 
-    print(f"Training and validation losses plotted and saved to figures/losses{iter}.svg")
+    print(f"Training and validation losses plotted and saved to figures/losses/{ndata}.svg")
 
 
 def PlotCritical(ndata):
@@ -50,9 +50,9 @@ def PlotCritical(ndata):
     ax.violinplot(reduced_distros.T,positions=separation*np.arange(size),widths=15)
     ax.legend(fontsize='large')
 
-    fig.savefig("figures/critical_time/n="+str(ndata)+".svg")
+    fig.savefig("figures/violin_plots/n="+str(ndata)+".svg")
 
-    print(f"Violin plot of critical time n = {ndata} plotted and saved to figures/critical_time/n={ndata}.pdf")
+    print(f"Violin plot of critical time n = {ndata} plotted and saved to figures/violin_plots/n={ndata}.pdf")
 
 
     correlations = Get_correlations(generated)
@@ -64,9 +64,9 @@ def PlotCritical(ndata):
     ax2.set_title("Correlations at n = "+str(ndata))
     ax2.plot(correlations)
 
-    fig2.savefig("figures/critical_time/correlations_n="+str(ndata)+".svg")
+    fig2.savefig("figures/correlations/n="+str(ndata)+".svg")
 
-    print(f"Correlations at critical time n = {ndata} plotted and saved to figures/critical_time/correlations_n={ndata}.pdf")
+    print(f"Correlations at critical time n = {ndata} plotted and saved to figures/correlations/n={ndata}.pdf")
 
 '''
 def PlotConsistency(time, timesteps):
