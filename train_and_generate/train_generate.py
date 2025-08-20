@@ -1,5 +1,5 @@
 from train_and_generate.generating import Generate
-from save_plot.plotter import PlotTrainval, PlotViolin, PlotCritical
+from save_plot.plotter import PlotTrainval, PlotCritical
 from initial_distributions.two_deltas import GenerateTwoDeltas
 from initial_distributions.six_deltas import GenerateSixDeltas
 
@@ -17,6 +17,5 @@ def TrainGenerate():
              n,
              timesteps)
         PlotTrainval(n)
-    #PlotViolin(iter)
         PlotCritical(n)
  

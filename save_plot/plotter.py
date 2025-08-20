@@ -25,27 +25,6 @@ def PlotTrainval(iter):
 
     print(f"Training and validation losses plotted and saved to figures/losses{iter}.svg")
 
-def PlotViolin(iter):
-
-    generated = pd.read_csv("data/generated_data.csv", header=None).to_numpy()
-    separation = 50
-#    means = np.mean(generated,axis=1)
-    reduced_distros = generated[::separation]
-
-    fig, ax = plt.subplots()
-    ax.set_ylabel(r"$x_{s}$")
-    ax.set_xlabel(r"$s$")
-    ax.set_title("Violin plot of generated data via backward process")
-
-    size = len(reduced_distros)
-
-    ax.violinplot(reduced_distros.T,positions=separation*np.arange(size),widths=25)
-
-    fig.savefig("figures/violin_plot"+str(iter)+".svg")
-    
-
-    print(f"Violin plot of generated data plotted and saved to figures/violin_plot{iter}.pdf")
-
 
 def PlotCritical(ndata):
 
@@ -108,3 +87,25 @@ def PlotConsistency(time, timesteps):
 
     fig.savefig("figures/consistency_plot.pdf")
 ''' 
+""""
+def PlotViolin(iter):
+
+    generated = pd.read_csv("data/generated_data.csv", header=None).to_numpy()
+    separation = 50
+#    means = np.mean(generated,axis=1)
+    reduced_distros = generated[::separation]
+
+    fig, ax = plt.subplots()
+    ax.set_ylabel(r"$x_{s}$")
+    ax.set_xlabel(r"$s$")
+    ax.set_title("Violin plot of generated data via backward process")
+
+    size = len(reduced_distros)
+
+    ax.violinplot(reduced_distros.T,positions=separation*np.arange(size),widths=25)
+
+    fig.savefig("figures/violin_plot"+str(iter)+".svg")
+    
+
+    print(f"Violin plot of generated data plotted and saved to figures/violin_plot{iter}.pdf")
+"""
