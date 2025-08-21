@@ -1,5 +1,6 @@
 #from critical.control_parameter import Theta
 from train_and_generate.correlation import GetCorrelations
+from test.true_dynamics import TrueDynamics
 
 
 import pandas as pd
@@ -45,10 +46,13 @@ def PlotCritical(timesteps, ndata):
     #ax.set_ylim(ymin,ymax)
 
     size = len(reduced_distros)
-    ax.vlines(critical_time, ymin=ymin, ymax=ymax, colors="red", linestyles='dashed', label='critical time')
 
     ax.violinplot(reduced_distros.T,positions=separation*np.arange(size),widths=15)
     ax.legend(fontsize='large')
+
+    #PlotTest(ax, fig, timesteps, ndata)
+
+    ax.vlines(critical_time, ymin=ymin, ymax=ymax, colors="red", linestyles='dashed', label='critical time')
 
     fig.savefig("figures/violin_plots/n="+str(ndata)+".svg")
 
@@ -64,9 +68,17 @@ def PlotCritical(timesteps, ndata):
     ax2.set_title("Correlations at n = "+str(ndata))
     ax2.plot(correlations)
 
+
     fig2.savefig("figures/correlations/n="+str(ndata)+".svg")
 
     print(f"Correlations at critical time n = {ndata} plotted and saved to figures/correlations/n={ndata}.pdf")
+
+def PlotTest(ax, fig, timesteps, ndata):
+
+    distros = TrueDynamics(timesteps, ndata)
+    reduced_distros = distros[::-1,::25]
+
+    ax.plot(reduced_distros, c="k", alpha = 0.5)
 
 '''
 def PlotConsistency(time, timesteps):
