@@ -26,9 +26,9 @@ def PlotTrainval(ndata):
     print(f"Training and validation losses plotted and saved to figures/losses/{ndata}.svg")
 
 
-def PlotCritical(ndata):
+def PlotCritical(timesteps, ndata):
 
-    critical_time = 300 - 158
+    critical_time = timesteps - 158
     ymin = -5
     ymax = 5
 

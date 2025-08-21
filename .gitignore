@@ -2,8 +2,4 @@
 
 *.csv
 
-#ignore all the pdf files
-
-*.tar
-
 .venv

@@ -15,5 +15,5 @@ def TrainGenerate():
 
         Generate(GenerateTwoDeltas, timesteps, n)
         PlotTrainval(n)
-        PlotCritical(n)
+        PlotCritical(timesteps, n)
  
