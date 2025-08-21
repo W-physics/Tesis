@@ -16,6 +16,7 @@ def Generate(initial_distribution, timesteps, ndata):
     """
     
     beta = BetaSchedule(timesteps)
+    alpha = 1 - beta
 
     distros = np.zeros((timesteps,ndata))
     distros[0] = np.random.normal(0, 1, ndata)
@@ -27,9 +28,10 @@ def Generate(initial_distribution, timesteps, ndata):
     for t in range(1,timesteps):
 
         previous_distro = torch.tensor(distros[t-1],dtype=torch.float32).reshape(-1,1)
-        guessed_noise = model(previous_distro).detach().numpy().reshape(-1,1)
+        guessed_noise = model(previous_distro).detach().numpy().reshape(-1,1).flatten()
         noise =  np.sqrt(beta[t]) * np.random.normal(0,1,ndata)
-        distros[t] = distros[t-1] * (1 + 0.5 * beta[t]) + np.sqrt(beta[t]) * (noise - guessed_noise.flatten())
+        distros[t] = 1/np.sqrt(alpha[t]) * (distros[t-1] - guessed_noise* beta[t]/(np.sqrt(1 - np.prod(alpha[:t]))) )
+        + noise
 
     SaveCSV(distros, "generated_data")
 

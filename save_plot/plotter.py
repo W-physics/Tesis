@@ -28,7 +28,7 @@ def PlotTrainval(ndata):
 
 def PlotCritical(ndata):
 
-    critical_time = 300 - 121
+    critical_time = 300 - 158
     ymin = -5
     ymax = 5
 

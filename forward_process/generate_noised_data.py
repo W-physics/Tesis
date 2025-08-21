@@ -18,16 +18,13 @@ def ForwardProcess(timesteps, initial_data):
     noised_data = np.zeros(ndata)
     noise = np.zeros(ndata)
     beta = BetaSchedule(timesteps)
+    alpha = 1 - beta
 
     for i in range(ndata):
 
         time = np.random.randint(len(beta))
         noise[i] = np.random.normal(0,1)
-        factor = np.zeros(len(beta[:time]))
-        for j in range(len(factor)):
-            factor[j] = np.sqrt(beta[j]) * np.prod(1 - beta[j+1:time])
-            
-        noised_data[i] = initial_data[i] * np.prod(1 - beta) + noise[i] * np.sum(factor)
+        noised_data[i] = initial_data[i]*np.sqrt(np.prod(alpha[:i])) + (1 - np.prod(alpha[:i]))*noise[i] 
 
     return  noised_data, noise
 
