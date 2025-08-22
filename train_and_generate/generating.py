@@ -26,12 +26,15 @@ def Generate(initial_distribution, timesteps, ndata):
     print("Backward process started...")
 
     for t in range(1,timesteps):
-
+        
         previous_distro = torch.tensor(distros[t-1],dtype=torch.float32).reshape(-1,1)
+
         guessed_noise = model(previous_distro).detach().numpy().reshape(-1,1).flatten()
-        noise =  np.sqrt(beta[t]) * np.random.normal(0,1,ndata)
-        distros[t] = 1/np.sqrt(alpha[t]) * (distros[t-1] - guessed_noise* beta[t]/(np.sqrt(1 - np.prod(alpha[:t]))) )
-        + noise
+
+        beta_hat = beta[t] * (1 - np.prod(alpha[:t-1]))/(1 - np.prod(alpha[:t]))
+        noise =  np.sqrt(beta_hat) * np.random.normal(0,1,ndata)
+        
+        distros[t] = 1/np.sqrt(alpha[t]) * (distros[t-1] - guessed_noise* beta[t]/(np.sqrt(1 - np.prod(alpha[:t]))) ) + noise
 
     SaveCSV(distros, "generated_data")
 
