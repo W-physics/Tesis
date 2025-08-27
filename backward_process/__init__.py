@@ -1,3 +1,3 @@
 from .generating import Generate
-from .training_nn import TrainModel
+from ..neural_network.training_nn import TrainModel
 from .correlation import GetCorrelations

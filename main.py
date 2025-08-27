@@ -1,4 +1,4 @@
-from train_and_generate.train_generate import TrainGenerate
+from backward_process.train_generate import TrainGenerate
 
 def main():
     TrainGenerate()

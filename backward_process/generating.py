@@ -1,9 +1,8 @@
 import numpy as np
 import torch
 
-from forward_process.neural_network import FeedForward
 from forward_process.generate_noised_data import BetaSchedule
-from train_and_generate.training_nn import TrainModel
+from neural_network.training_nn import TrainModel
 
 from save_plot.save_files import SaveCSV
 
@@ -21,10 +20,12 @@ def Generate(initial_distribution, timesteps, ndata):
     distros = np.zeros((timesteps,ndata))
     distros[0] = np.random.normal(0, 1, ndata)
 
-    model = TrainModel(timesteps, ndata, initial_distribution)
+    model, loss_hist_train, val_hist_train = TrainModel(timesteps, ndata, initial_distribution) 
+
+    PlotTrainval(ndata, loss_hist_train, val_hist_train)
 
     print("Backward process started...")
-
+ 
     for t in range(1,timesteps):
         
         previous_distro = torch.tensor(distros[t-1],dtype=torch.float32).reshape(-1,1)
@@ -39,4 +40,23 @@ def Generate(initial_distribution, timesteps, ndata):
     SaveCSV(distros, "generated_data")
 
 
-    
+
+def PlotTrainval(ndata, loss_hist_train, loss_hist_valid):
+    """
+    Plots learning curves of training and validation sets
+    """
+
+    fig, ax = plt.subplots()
+
+    ax.set_xlabel("epochs")
+    ax.set_ylabel("MSE")
+    ax.setylim(0, max(loss_hist_train.max(), loss_hist_valid.max())) 
+    ax.set_title("Training and validation errors")
+
+    ax.plot(loss_hist_train,label='train')
+    ax.plot(loss_hist_valid,label='valid')
+    ax.legend(fontsize='large')
+
+    fig.savefig('figures/losses/'+str(ndata)+'.svg')
+
+    print(f"Training and validation losses plotted and saved to figures/losses/{ndata}.svg")

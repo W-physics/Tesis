@@ -9,7 +9,7 @@ class FeedForward(nn.Module):
     l = [0] * (2 * (n_hidden_layers + 2) - 1)
     l[0] = nn.Linear(input_size,depht)
     l[1] = nn.ReLU()
-    l[-1] = nn.Linear(depht,output_size)
+    l[-1] = 2 * nn.Softmax(depht,output_size) - 1
 
     #Assembling hidden layers
     i = 0

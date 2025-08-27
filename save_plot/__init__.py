@@ -1,2 +1,2 @@
 from .save_files import SaveCSV,SaveCheckpoint
-from .plotter import PlotTrainval, PlotCritical
+from .plotter import PlotCritical

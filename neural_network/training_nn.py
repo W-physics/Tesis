@@ -2,9 +2,9 @@ import torch
 import torch.nn as nn
 import numpy as np
 
-from forward_process.neural_network import FeedForward
+from neural_network.neural_network import FeedForward
 from forward_process.generate_noised_data import GenerateNoisedData
-from forward_process.preprocessing import Preprocessing
+from neural_network.preprocessing import Preprocessing
 from save_plot.save_files import SaveCSV
 
 def Train(model,num_epochs,train_dl,valid_dl, patience=5, min_delta=0.001):
@@ -81,10 +81,12 @@ def TrainModel(timesteps, ndata, initial_distribution):
   #checkpoint = {'model_state_dict': model.state_dict()}
   #'optimizer_state_dict': optimizer.state_dict()}
   
+  print (f"Test error = {model(test_dl)}")
+  
   #SaveCheckpoint(checkpoint)
-  SaveCSV(loss_hist_train, "loss_hist_train")
-  SaveCSV(loss_hist_valid, "loss_hist_valid")
+  #SaveCSV(loss_hist_train, "loss_hist_train")
+  #SaveCSV(loss_hist_valid, "loss_hist_valid")
 
-  return model
+  return model, loss_hist_train, loss_hist_valid
 #  return model, loss_hist_train, loss_hist_valid, test_dl
 

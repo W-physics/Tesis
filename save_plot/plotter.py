@@ -1,30 +1,11 @@
 
-from train_and_generate.correlation import GetCorrelations
+from backward_process.correlation import GetCorrelations
 from test.true_dynamics import TrueDynamics
 
 
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-
-def PlotTrainval(ndata):
-
-    loss_hist_train = pd.read_csv("data/loss_hist_train.csv", header=None).to_numpy()
-    loss_hist_valid = pd.read_csv("data/loss_hist_valid.csv", header=None).to_numpy()
-
-    fig, ax = plt.subplots()
-
-    ax.set_xlabel("epochs")
-    ax.set_ylabel("MSE")
-    ax.set_title("Training and validation errors")
-
-    ax.plot(loss_hist_train,label='train')
-    ax.plot(loss_hist_valid,label='valid')
-    ax.legend(fontsize='large')
-
-    fig.savefig('figures/losses/'+str(ndata)+'.svg')
-
-    print(f"Training and validation losses plotted and saved to figures/losses/{ndata}.svg")
 
 def PlotCritical(timesteps, ndata):
 
@@ -35,7 +16,7 @@ def PlotCritical(timesteps, ndata):
 
     fig, ax = plt.subplots()
     ax.set_ylabel(r"$x_{s}$")
-    ax.set_xlabel(r"$s$")
+    ax.set_xlabel(r"$s/s_c$")
     ax.set_title("Trajectorie plot of critical time n = "+str(ndata))
     #ax.set_xlim(75,175)
     #ax.set_ylim(ymin,ymax)
@@ -44,34 +25,32 @@ def PlotCritical(timesteps, ndata):
 
     PlotSim(ax, ndata, ncurves)
     PlotTest(ax, timesteps, ndata, ncurves)
-
-    ax.vlines(critical_time, ymin=ymin, ymax=ymax, colors="red", linestyles='dashed', label='critical time')
-
     #ax.legend()
 
     fig.savefig("figures/violin_plots/n="+str(ndata)+".svg")
 
     print(f"Violin plot of critical time n = {ndata} plotted and saved to figures/violin_plots/n={ndata}.pdf")
 
-def PlotSim(ax, ndata, ncurves):
+def PlotSim(ax, ndata, ncurves, critical_time):
 
     distros = pd.read_csv("data/generated_data.csv", header=None).to_numpy()
     reduced_distros = distros[::-1,::ndata//ncurves]
+    timesteps = distros.shape[0]
+    reduced_timesteps = np.arange(timesteps)/critical_time
 
-    ax.plot(reduced_distros, c="b", alpha = 0.5, label="simulated")
+    ax.plot(reduced_timesteps,reduced_distros, c="b", alpha = 0.5, label="simulated")
 
-def PlotTest(ax, timesteps, ndata, ncurves):
+def PlotTest(ax, timesteps, ndata, ncurves, critical_time):
 
     distros = TrueDynamics(timesteps, ndata)
     reduced_distros = distros[::-1,::ndata//ncurves]
 
-    ax.plot(reduced_distros, c="k", alpha = 0.5, label="true dynamics")
+    reduced_timesteps = np.arange(timesteps)/critical_time
+
+
+    ax.plot(reduced_timesteps, reduced_distros, c="k", alpha = 0.5, label="true dynamics")
 
 def PlotCorrelations(ndata):
-
-
-    
-
 
     generated = pd.read_csv("data/generated_data.csv", header=None).to_numpy()
     correlations = GetCorrelations(generated)
@@ -87,25 +66,6 @@ def PlotCorrelations(ndata):
 
     print(f"Correlations at critical time n = {ndata} plotted and saved to figures/correlations/n={ndata}.pdf")
 
-'''
-def PlotConsistency(time, timesteps):
-
-    theta = Theta(time, timesteps)
-
-    x = np.linspace(-1, 1, 100)
-
-    right_side = (1 + theta**2) / (1 - theta**2) * x
-    left_side = 2 * theta * np.tanh(x* theta / (1 - theta**2))
-
-    fig, ax = plt.subplots()
-    ax.set_title(f"Plot of the consistency equation with theta = {theta:.2f}")
-
-    ax.plot(x, right_side, label="right_side")
-    ax.plot(x, left_side, label="left_side")
-    ax.legend(fontsize='large')
-
-    fig.savefig("figures/consistency_plot.pdf")
-''' 
 """"
 def PlotViolin(iter):
 

@@ -1,7 +1,7 @@
-from train_and_generate.generating import Generate
-from save_plot.plotter import PlotTrainval, PlotCritical
+from backward_process.generating import Generate
+from save_plot.plotter import PlotCritical
 from initial_distributions.two_deltas import GenerateTwoDeltas
-from initial_distributions.six_deltas import GenerateSixDeltas
+#from initial_distributions.six_deltas import GenerateSixDeltas
 
 import matplotlib.pyplot as plt
 
@@ -14,6 +14,5 @@ def TrainGenerate():
     for n in ndata:
 
         Generate(GenerateTwoDeltas, timesteps, n)
-        PlotTrainval(n)
         PlotCritical(timesteps, n)
  
