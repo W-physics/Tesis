@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+import matplotlib.pyplot as plt
 
 from forward_process.generate_noised_data import BetaSchedule
 from neural_network.training_nn import TrainModel
@@ -50,7 +51,7 @@ def PlotTrainval(ndata, loss_hist_train, loss_hist_valid):
 
     ax.set_xlabel("epochs")
     ax.set_ylabel("MSE")
-    ax.setylim(0, max(loss_hist_train.max(), loss_hist_valid.max())) 
+    ax.set_ylim(0, max(loss_hist_train.max(), loss_hist_valid.max())) 
     ax.set_title("Training and validation errors")
 
     ax.plot(loss_hist_train,label='train')
@@ -60,3 +61,4 @@ def PlotTrainval(ndata, loss_hist_train, loss_hist_valid):
     fig.savefig('figures/losses/'+str(ndata)+'.svg')
 
     print(f"Training and validation losses plotted and saved to figures/losses/{ndata}.svg")
+

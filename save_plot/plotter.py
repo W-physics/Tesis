@@ -23,8 +23,8 @@ def PlotCritical(timesteps, ndata):
 
     ncurves = 5
 
-    PlotSim(ax, ndata, ncurves)
-    PlotTest(ax, timesteps, ndata, ncurves)
+    PlotSim(ax, ndata, ncurves, critical_time)
+    PlotTest(ax, timesteps, ndata, ncurves, critical_time)
     #ax.legend()
 
     fig.savefig("figures/violin_plots/n="+str(ndata)+".svg")

@@ -1,4 +1,12 @@
 import torch.nn as nn
+import torch
+
+class CustomActivation(nn.Module):
+  def __init__(self):
+    super().__init__()
+
+  def forward(self,x):
+    return torch.tensor(2) * torch.sigmoid(x) - torch.tensor(1)
 
 class FeedForward(nn.Module):
 
@@ -6,10 +14,11 @@ class FeedForward(nn.Module):
     super().__init__()
 
     #Setting input and output layers
-    l = [0] * (2 * (n_hidden_layers + 2) - 1)
+    l = [0] * 2 * (n_hidden_layers + 2) 
     l[0] = nn.Linear(input_size,depht)
     l[1] = nn.ReLU()
-    l[-1] = 2 * nn.Softmax(depht,output_size) - 1
+    l[-2] = nn.Linear(depht,output_size)
+    l[-1] = CustomActivation()
 
     #Assembling hidden layers
     i = 0
@@ -24,3 +33,4 @@ class FeedForward(nn.Module):
     for layer in self.model_list:
       x = layer(x)
     return x
+  
