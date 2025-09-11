@@ -7,12 +7,12 @@ import matplotlib.pyplot as plt
 
 def TrainGenerate():
 
-    ndata = [500,1000,5000,10000]
-    timesteps = 300
+    #ndata = [500,1000,5000,10000]
+    #timesteps = 300
     plt.style.use('bmh')
 
     for n in ndata:
 
         Generate(GenerateTwoDeltas, timesteps, n)
-        PlotCritical(timesteps, n)
+        #PlotCritical(timesteps, n)
  
