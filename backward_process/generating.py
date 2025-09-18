@@ -40,8 +40,6 @@ def Generate(initial_distribution, timesteps, ndata):
 
     SaveCSV(distros, "generated_data")
 
-
-
 def PlotTrainval(ndata, loss_hist_train, loss_hist_valid):
     """
     Plots learning curves of training and validation sets

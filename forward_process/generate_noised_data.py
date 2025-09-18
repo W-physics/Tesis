@@ -24,14 +24,12 @@ def ForwardProcess(timesteps, initial_data):
 
         time = np.random.randint(len(beta))
         noise[i] = np.random.normal(0,1)
-        noised_data[i] = initial_data[i]*np.sqrt(np.prod(alpha[:i])) + (1 - np.prod(alpha[:i]))*noise[i] 
+        noised_data[i] = initial_data[i]*np.sqrt(np.prod(alpha[:time])) + (1 - np.prod(alpha[:time]))*noise[i] 
 
     return  noised_data, noise
 
 def GenerateNoisedData(timesteps, ndata, initial_distribution):
 
     data = initial_distribution(ndata)
-
-    print("forward process started...")
     
     return ForwardProcess(timesteps, data)

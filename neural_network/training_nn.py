@@ -2,80 +2,78 @@ import torch
 import torch.nn as nn
 import numpy as np
 
+torch.cuda.is_available()
+
+device = torch.device(f'cuda:{torch.cuda.current_device()}') if torch.cuda.is_available() else 'cpu'
+
+torch.set_default_device(device)
+
 from neural_network.neural_network import FeedForward
 from forward_process.generate_noised_data import GenerateNoisedData
 from neural_network.preprocessing import Preprocessing
 from save_plot.save_files import SaveCSV
 
-def Train(model,num_epochs,train_dl,valid_dl, patience=5, min_delta=0.001):
-    
-    optimizer = torch.optim.Adam(model.parameters(),lr=0.001)
+def Train(learning_rate, model, num_epochs, train_dl, valid_dl):
+
+    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
     loss_fn = nn.MSELoss()
 
     loss_hist_train = np.zeros(num_epochs)
     loss_hist_valid = np.zeros(num_epochs)
 
-    # Variables for early stopping
-
-    best_loss = float('inf')
-    epochs_no_improve = 0
-    best_model_state = None
-
     for epoch in range(num_epochs):
-        
-      model.train()  # Set model to training mode
+
+      model.train()
       train_loss = 0.0
 
       for x_batch, y_batch in train_dl:
 
-        pred = model(x_batch)
+        x = x_batch.view(x_batch.size(0), -1).detach().clone().requires_grad_(True)
+        y = y_batch.view(y_batch.size(0), -1).detach().clone().requires_grad_(True)
+
+        pred = model(x)
             #Define loss function
-        loss = loss_fn(pred, y_batch)
+        loss = loss_fn(pred, y)
             #Backpropagation
         loss.backward()
             #Apply gradient to the weights
         optimizer.step()
             #Make gradients zero
         optimizer.zero_grad()
-        loss_hist_train[epoch] += loss.item()*y_batch.size(0)
+        loss_hist_train[epoch] = loss.item()
 
       for x_batch, y_batch in valid_dl:
 
-        pred = model(x_batch)
-        loss = loss_fn(pred, y_batch)
+        x = x_batch.view(x_batch.size(0), -1).detach().clone().requires_grad_(True)
+        y = y_batch.view(y_batch.size(0), -1).detach().clone().requires_grad_(True)
 
-        loss_hist_valid[epoch] += loss.item()*y_batch.size(0)
+        pred = model(x)
+        loss = loss_fn(pred, y)
 
-      loss_hist_train[epoch] /= len(train_dl.dataset)
-      loss_hist_valid[epoch] /= len(valid_dl.dataset)
-
-      if loss_hist_valid[epoch] < best_loss - min_delta:
-        best_loss = loss_hist_valid[epoch]
-        epochs_no_improve = 0
-        best_model_state = model.state_dict()  # Save the best model
-      else:
-        epochs_no_improve += 1
-
-      if epochs_no_improve >= patience:
-        print(f'Early stopping triggered after {epoch+1} epochs!')
-        model.load_state_dict(best_model_state)  # Restore best model
-        final_epoch = epoch
-        break
-    
-    loss_hist_train = loss_hist_train[:final_epoch+1]
-    loss_hist_valid = loss_hist_valid[:final_epoch+1]
+        loss_hist_valid[epoch] = loss.item()
 
     return loss_hist_train, loss_hist_valid
 
 def TrainModel(timesteps, ndata, initial_distribution):
 
-    model = FeedForward(input_size=1,output_size=1,n_hidden_layers=3,depht=4)
+    model = FeedForward(input_size=1,output_size=1,n_hidden_layers=2,depht=100).to(device)
 
     noised_data, noise = GenerateNoisedData(timesteps, ndata, initial_distribution)
-    train_dl, valid_dl, test_dl = Preprocessing(noised_data, noise)
+    train_dl, valid_dl, test_feature, test_target = Preprocessing(noised_data, noise)
 
-    loss_hist_train,loss_hist_valid = Train(model=model, num_epochs=1000,
-                                           train_dl=train_dl, valid_dl=valid_dl)
+
+
+    loss_hist_train, loss_hist_valid = Train(learning_rate=0.01, model=model, num_epochs=50,
+                                           train_dl=train_dl, valid_dl=valid_dl
+                                           )
+
+    pred = model(test_feature.view(test_feature.size(0), -1))
+
+    loss_fn = nn.MSELoss()
+
+    test_loss = loss_fn(pred, test_target.view(test_target.size(0), -1))
+
+    print(f'test error:  {test_loss}')
 
     return model, loss_hist_train, loss_hist_valid
 

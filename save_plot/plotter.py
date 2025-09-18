@@ -27,9 +27,9 @@ def PlotCritical(timesteps, ndata):
     PlotTest(ax, timesteps, ndata, ncurves, critical_time)
     #ax.legend()
 
-    fig.savefig("figures/violin_plots/n="+str(ndata)+".svg")
+    fig.savefig("figures/trajectories/n="+str(ndata)+".svg")
 
-    print(f"Violin plot of critical time n = {ndata} plotted and saved to figures/violin_plots/n={ndata}.pdf")
+    print(f"Violin plot of critical time n = {ndata} plotted and saved to figures/trajectories/n={ndata}.pdf")
 
 def PlotSim(ax, ndata, ncurves, critical_time):
 
