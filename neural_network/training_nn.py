@@ -56,10 +56,10 @@ def Train(learning_rate, model, num_epochs, train_dl, valid_dl):
 
 def TrainModel(timesteps, ndata, initial_distribution):
 
-    model = FeedForward(input_size=1,output_size=1,n_hidden_layers=2,depht=100).to(device)
+    model = FeedForward(input_size=2,output_size=1,n_hidden_layers=3,depht=200).to(device)
 
-    noised_data, noise = GenerateNoisedData(timesteps, ndata, initial_distribution)
-    train_dl, valid_dl, test_feature, test_target = Preprocessing(noised_data, noise)
+    features, noise = GenerateNoisedData(timesteps, ndata, initial_distribution)
+    train_dl, valid_dl, test_feature, test_target = Preprocessing(features, noise)
 
 
 
