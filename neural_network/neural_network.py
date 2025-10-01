@@ -15,7 +15,6 @@ class FeedForward(nn.Module):
     last_layer.bias.data.fill_(0)
     l.append(last_layer)
 
-    #l.append(nn.Tanh())
     self.model_list = nn.ModuleList(l)
 
   def forward(self,x):
@@ -23,7 +22,7 @@ class FeedForward(nn.Module):
       x = layer(x)
     return x
   
-class ConvNet(nn.Module):
+class MiniUnet(nn.Module):
   def __init__(self):
     super().__init__()
     l = []

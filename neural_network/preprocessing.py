@@ -8,13 +8,13 @@ def CreateDataloader(data,target):
 
   g = torch.Generator(device=data.device)
   data_ds = TensorDataset(data,target)
-  data_dl = DataLoader(data_ds, batch_size=2000, shuffle=True, generator=g)
+  data_dl = DataLoader(data_ds, batch_size=800, shuffle=True, generator=g)
 
   return data_dl
 
 def Preprocessing(data, target):
 
-  data = torch.tensor(data, dtype=torch.float32).view(data.shape[0],1,data.shape[1])
+  data = torch.tensor(data, dtype=torch.float32)
   target = torch.tensor(target, dtype=torch.float32)
 
   train_data_, test_data, train_target_, test_target = train_test_split(data, target, test_size=0.2)
