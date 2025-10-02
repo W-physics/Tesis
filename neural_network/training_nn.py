@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import numpy as np
+from sklearn.preprocessing import StandardScaler
 
 torch.cuda.is_available()
 
@@ -52,12 +53,16 @@ def TrainModel(timesteps, ndata, initial_distribution):
 
     features, noise = GenerateNoisedData(timesteps, ndata, initial_distribution)
 
+    features = features.reshape(-1,2)
+    scaler = StandardScaler()
+
+    features = scaler.fit_transform(features)
 
     train_dl, valid_dl, test_feature, test_target = Preprocessing(features, noise)
 
 
 
-    loss_hist_train, loss_hist_valid = Train(learning_rate=0.0005, model=model, num_epochs=30,
+    loss_hist_train, loss_hist_valid = Train(learning_rate=0.01, model=model, num_epochs=30,
                                            train_dl=train_dl, valid_dl=valid_dl
                                            )
 
@@ -69,5 +74,5 @@ def TrainModel(timesteps, ndata, initial_distribution):
 
     print(f'test error:  {test_loss}')
 
-    return model, loss_hist_train, loss_hist_valid
+    return model, loss_hist_train, loss_hist_valid, scaler
 

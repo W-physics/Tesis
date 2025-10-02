@@ -34,7 +34,7 @@ def PlotCritical(timesteps, ndata):
 def PlotSim(ax, ndata, ncurves, critical_time):
 
     distros = pd.read_csv("data/generated_data.csv", header=None).to_numpy()
-    reduced_distros = distros[::-1,::ndata//ncurves]
+    reduced_distros = distros[:,::ndata//ncurves]
     timesteps = distros.shape[0]
     reduced_timesteps = np.arange(timesteps)/critical_time
 

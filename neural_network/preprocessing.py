@@ -14,7 +14,7 @@ def CreateDataloader(data,target):
 
 def Preprocessing(data, target):
 
-  data = torch.tensor(data.reshape(-1,2), dtype=torch.float32)
+  data = torch.tensor(data, dtype=torch.float32)
   target = torch.tensor(target, dtype=torch.float32)
 
   train_data_, test_data, train_target_, test_target = train_test_split(data, target, test_size=0.2)

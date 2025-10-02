@@ -21,19 +21,20 @@ def Generate(initial_distribution, timesteps, ndata):
     distros = np.zeros((timesteps,ndata))
     distros[0] = np.random.normal(0, 1, ndata)
 
-    model, loss_hist_train, val_hist_train = TrainModel(timesteps, ndata, initial_distribution) 
+    model, loss_hist_train, val_hist_train, scaler = TrainModel(timesteps, ndata, initial_distribution) 
 
     PlotTrainval(ndata, loss_hist_train, val_hist_train)
 
     print("Backward process started...")
  
     for t in range(1,timesteps):
+
+        times = np.array(timesteps - t).repeat(ndata)
         
-        previous_distro = torch.tensor(distros[t-1],dtype=torch.float32).view(-1)
+        feat = np.vstack((distros[t-1], times)).T
+        scaled_feat = scaler.transform(feat)
 
-        s = torch.tensor(timesteps - t, dtype=torch.float32).tile(ndata)
-
-        features = torch.stack((previous_distro, s), dim=1)
+        features = torch.tensor(scaled_feat, dtype=torch.float32)
 
         guessed_noise = model(features).detach().numpy().flatten()
 

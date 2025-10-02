@@ -1,4 +1,5 @@
 import torch.nn as nn
+import torch
 
 class FeedForward(nn.Module):
 
@@ -21,8 +22,10 @@ class FeedForward(nn.Module):
     self.model_list = nn.ModuleList(l)
 
   def forward(self,x):
+
     for layer in self.model_list:
       x = layer(x)
+      
     return x
   
 class MiniUnet(nn.Module):
