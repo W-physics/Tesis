@@ -8,16 +8,10 @@ import matplotlib.pyplot as plt
 
 def TrainGenerate():
 
-    ndata = 20000
+    ndata = 200
     timesteps = 300
     plt.style.use('bmh')
 
-    #model, loss_train, loss_val = TrainModel(timesteps, ndata, initial_distribution=GenerateTwoDeltas)
-
-    #plt.plot(loss_train, label='train')
-    #plt.plot(loss_val, label='valid')
-    #plt.legend();
-    #plt.show()  
     Generate(GenerateTwoDeltas, timesteps, ndata)
     PlotCritical(timesteps, ndata)
  

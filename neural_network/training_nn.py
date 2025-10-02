@@ -26,31 +26,29 @@ def Train(learning_rate, model, num_epochs, train_dl, valid_dl):
 
       model.train()
 
-      for x_batch, y_batch in train_dl:
+      for (x_train_batch, y_train_batch), (x_val_batch, y_val_batch) in zip(train_dl, valid_dl):
 
-        pred = model(x_batch).view(-1)
+        train_pred = model(x_train_batch).view(-1)
             #Define loss function
-        loss = loss_fn(pred, y_batch)
+        train_loss = loss_fn(train_pred, y_train_batch)
             #Backpropagation
-        loss.backward()
+        train_loss.backward()
             #Apply gradient to the weights
         optimizer.step()
             #Make gradients zero
         optimizer.zero_grad()
-        loss_hist_train[epoch] = loss.item()
 
-      for x_batch, y_batch in valid_dl:
+        val_pred = model(x_val_batch).view(-1)
+        val_loss = loss_fn(val_pred, y_val_batch)
 
-        pred = model(x_batch).view(-1)
-        loss = loss_fn(pred, y_batch)
-
-        loss_hist_valid[epoch] = loss.item()
+        loss_hist_train[epoch] = train_loss.item()
+        loss_hist_valid[epoch] = val_loss.item()
 
     return loss_hist_train, loss_hist_valid
 
 def TrainModel(timesteps, ndata, initial_distribution):
 
-    model = FeedForward(input_size=30,output_size=1,n_hidden_layers=3,depht=200).to(device)
+    model = FeedForward(input_size=2,output_size=1,n_hidden_layers=2,depht=200).to(device)
 
     features, noise = GenerateNoisedData(timesteps, ndata, initial_distribution)
 
@@ -59,7 +57,7 @@ def TrainModel(timesteps, ndata, initial_distribution):
 
 
 
-    loss_hist_train, loss_hist_valid = Train(learning_rate=0.0005, model=model, num_epochs=40,
+    loss_hist_train, loss_hist_valid = Train(learning_rate=0.0005, model=model, num_epochs=30,
                                            train_dl=train_dl, valid_dl=valid_dl
                                            )
 

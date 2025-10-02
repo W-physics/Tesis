@@ -21,10 +21,10 @@ def PlotCritical(timesteps, ndata):
     #ax.set_xlim(75,175)
     #ax.set_ylim(ymin,ymax)
 
-    ncurves = 5
+    ncurves = 20
 
     PlotSim(ax, ndata, ncurves, critical_time)
-    PlotTest(ax, timesteps, ndata, ncurves, critical_time)
+    #PlotTest(ax, timesteps, ndata, ncurves, critical_time)
     #ax.legend()
 
     fig.savefig("figures/trajectories/n="+str(ndata)+".svg")
@@ -49,6 +49,7 @@ def PlotTest(ax, timesteps, ndata, ncurves, critical_time):
 
 
     ax.plot(reduced_timesteps, reduced_distros, c="k", alpha = 0.5, label="true dynamics")
+    ax.legend()
 
 def PlotCorrelations(ndata):
 

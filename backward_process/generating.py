@@ -29,9 +29,13 @@ def Generate(initial_distribution, timesteps, ndata):
  
     for t in range(1,timesteps):
         
-        previous_distro = torch.tensor(distros[t-1],dtype=torch.float32).reshape(-1,1)
+        previous_distro = torch.tensor(distros[t-1],dtype=torch.float32).view(-1)
 
-        guessed_noise = model(previous_distro.tile(30)).detach().numpy().reshape(-1,1).flatten()
+        s = torch.tensor(timesteps - t, dtype=torch.float32).tile(ndata)
+
+        features = torch.stack((previous_distro, s), dim=1)
+
+        guessed_noise = model(features).detach().numpy().flatten()
 
         beta_hat = beta[t] * (1 - np.prod(alpha[:t-1]))/(1 - np.prod(alpha[:t]))
         noise =  np.sqrt(beta_hat) * np.random.normal(0,1,ndata)

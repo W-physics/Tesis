@@ -13,23 +13,24 @@ def ForwardProcess(timesteps, initial_data):
     generate a 1D noised data and store it in the noised_data array. This is repeated
     for each data point in the initial_data array.
     """
-    samples = 30
     ndata = len(initial_data)
-    noised_data = np.zeros((ndata,samples))
+    features = np.zeros((ndata, timesteps,2))
     noises = np.random.normal(0,1,size=ndata)
     beta = BetaSchedule(timesteps)
     alpha = 1 - beta
-    times = np.random.randint(low=0, high=timesteps-samples, size=ndata)
-
+    times = np.arange(timesteps)
     for i in range(ndata):
 
         noise = noises[i]
 
-        for j in range(samples):
-            time = times[i] + j
-            noised_data[i,j] = initial_data[i]*np.sqrt(np.prod(alpha[:time])) + (1 - np.prod(alpha[:time]))*noise
+        for j in range(timesteps):
 
-    return  noised_data, noises
+            time = times[j]
+            noised_data = initial_data[i]*np.sqrt(np.prod(alpha[:time])) + (1 - np.prod(alpha[:time]))*noise
+            features[i,j] = noised_data, time
+
+
+    return  features, noises.repeat(timesteps)
 
 def GenerateNoisedData(timesteps, ndata, initial_distribution):
 

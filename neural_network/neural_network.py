@@ -4,11 +4,14 @@ class FeedForward(nn.Module):
 
   def __init__(self, input_size, output_size,n_hidden_layers,depht):
     super().__init__()
-
-    l = [nn.Linear(input_size,depht), nn.ReLU()]
+    first_layer = nn.Linear(input_size,depht)
+    first_layer.bias.data.fill_(0)
+    l = [first_layer, nn.ReLU()]
     i = 0
     while i < n_hidden_layers:
-      l.append(nn.Linear(depht, depht))
+      linear = nn.Linear(depht, depht)
+      linear.bias.data.fill_(0)
+      l.append(linear)
       l.append(nn.ReLU())
       i+=1
     last_layer = nn.Linear(depht, output_size)

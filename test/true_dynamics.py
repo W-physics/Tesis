@@ -20,10 +20,6 @@ def TrueDynamics(timesteps, ndata):
         delta = 1 - theta**2
         fraction = theta/delta 
         previous_distro = distros[t-1]
-        distros[t] = previous_distro * (
-            1 - beta*(1+theta**2)/(2*delta)
-            ) + fraction*beta*np.tanh(previous_distro*fraction) + np.sqrt(beta) * np.random.normal(
-                0, 1, ndata
-                )
+        distros[t] = previous_distro*(beta/2 * theta**2/delta + 1) - beta/2 * fraction * np.tanh(fraction * previous_distro)
     
     return distros
