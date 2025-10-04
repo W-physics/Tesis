@@ -14,23 +14,28 @@ def ForwardProcess(timesteps, initial_data):
     for each data point in the initial_data array.
     """
     ndata = len(initial_data)
-    features = np.zeros((ndata, timesteps,2))
-    noises = np.random.normal(0,1,size=ndata)
+    features = np.zeros((ndata, timesteps, 2))
+    noises = np.random.normal(0,1,size=(ndata,timesteps))
     beta = BetaSchedule(timesteps)
     alpha = 1 - beta
+    alpha_bar = np.cumprod(alpha)
     times = np.arange(timesteps)
     for i in range(ndata):
 
-        noise = noises[i]
+        # usar np.prod(alpha[:time]) genera un bug pues el primer elemento es 1
+        # en vez alpha[0] 
+        # es mejor usar cumprod
 
         for j in range(timesteps):
-
+            noise = noises[i,j]
             time = times[j]
-            noised_data = initial_data[i]*np.sqrt(np.prod(alpha[:time])) + (1 - np.prod(alpha[:time]))*noise
+            noised_data = initial_data[i]*np.sqrt(alpha_bar[time]) + np.sqrt((1 - alpha_bar[time]))*noise
+            # Error inicial: la desviación estándar del ruido es sqrt(1 - alpha_bar y no 1-alpha_bar
+            # noised_data = initial_data[i]*np.sqrt(alpha_bar[time]) + (1 - alpha_bar[time])*noise
             features[i,j] = noised_data, time
 
 
-    return  features, noises.repeat(timesteps)
+    return  features, noises
 
 def GenerateNoisedData(timesteps, ndata, initial_distribution):
 
