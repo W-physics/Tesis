@@ -16,11 +16,11 @@ torch.set_default_device(device)
 
 
 def main():
-    ndata = 300
+    ndata = 200
     timesteps = 300
     plt.style.use('bmh')
 
-    Generate(GenerateTwoInequalDeltas, timesteps, ndata)
+    #Generate(GenerateTwoDeltas, timesteps, ndata)
     PlotCritical(timesteps, ndata)
 
 main()

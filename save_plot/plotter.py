@@ -1,5 +1,6 @@
 from backward_process.correlation import GetCorrelations
 from test.true_dynamics import TrueDynamics
+from backward_process.fitting import ExponentialFitting
 
 
 import pandas as pd
@@ -24,20 +25,9 @@ def PlotCritical(timesteps, ndata):
     distros_c1 = distros[:, distros[-1,:] >= 0]
     distros_c2 = distros[:, distros[-1,:] < 0]
 
-    hist0_c1 = distros_c1[0,:]
-    hist2_c1 = distros_c1[-1,:]
 
-    hist0_c2 = distros_c2[0,:]
-    hist2_c2 = distros_c2[-1,:]
-
-    ax[0].hist(hist0_c1, bins=50, orientation='horizontal', density=True, color='b', alpha=0.5)
-    ax[2].hist(hist2_c1, bins=50, orientation='horizontal', density=True, color='b', alpha=0.5)
-
-    ax[0].hist(hist0_c2, bins=50, orientation='horizontal', density=True, color='g', alpha=0.5)
-    ax[2].hist(hist2_c2, bins=50, orientation='horizontal', density=True, color='g', alpha=0.5)
-
-    ax[0].invert_xaxis()
-
+    PlotHistograms(ax, distros_c1)
+    PlotHistograms(ax, distros_c2)
 
     PlotSim(distros, reduced_timesteps, ax[1], ncurves)
     #PlotTest(ax[1], timesteps, ndata, ncurves, critical_time)
@@ -51,6 +41,14 @@ def PlotCritical(timesteps, ndata):
     PlotCorrelations(ax2, distros_c1, reduced_timesteps, color='b')
     PlotCorrelations(ax2, distros_c2, reduced_timesteps, color='g')
     #ax.legend()
+
+    exponent_steps = 10
+    c1_curves = distros_c1.shape[1]
+    exponent_distros = distros_c1[critical_time:,:].reshape(-1)
+    exponent_timesteps = np.tile(np.arange(len(distros_c1[critical_time:,:])), c1_curves)
+
+    exponent, sigma_exponent = ExponentialFitting(exponent_timesteps, exponent_distros)
+                                                  
 
     fig.savefig("figures/trajectories/n="+str(ndata)+".svg")
     print(f"Trajerctorie plot of critical time n = {ndata} plotted and saved to figures/trajectories/n={ndata}.pdf")
@@ -79,6 +77,18 @@ def PlotCorrelations(ax,distros, reduced_timesteps, color):
     correlations = GetCorrelations(distros)
 
     ax.plot(reduced_timesteps, correlations, color=color)
+
+def PlotHistograms(ax, distros):
+
+    hist0 = distros[0,:]
+    hist2= distros[-1,:]
+
+    color = 'b' if hist2[0] >= 0 else 'g'
+
+    ax[0].hist(hist0, bins=50, orientation='horizontal', density=True, color=color, alpha=0.5)
+    ax[2].hist(hist2, bins=50, orientation='horizontal', density=True, color=color, alpha=0.5)
+
+    ax[0].invert_xaxis()
 
 
 def PlotTest(ax, timesteps, ndata, ncurves, critical_time):
