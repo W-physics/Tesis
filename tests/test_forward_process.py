@@ -1,5 +1,5 @@
 import numpy as np
-from forward_process.generate_noised_data import ForwardProcess, GenerateNoisedData
+from forward_process.generate_noised_data import ForwardProcess, GenerateNoisedData, BetaSchedule
 
 def test_ForwardProcess_shapes():
     """ Test that the output shapes are correct.
@@ -85,9 +85,6 @@ def test_ForwardProcess_gaussian():
     err = np.square((hist - gauss)).mean()
     assert np.isclose(err, 0, atol=1e-3), f"{t=}, {err=}"
 
-
-
-
 def test_GenerateNoisedData_shapes():
     timesteps = 10
     ndata = 5
@@ -96,3 +93,14 @@ def test_GenerateNoisedData_shapes():
     features, noises = GenerateNoisedData(timesteps, ndata, initial_distribution)
     assert features.shape == (ndata, timesteps,2)
     assert noises.shape == (ndata, timesteps)
+
+def test_BetaSchedule():
+    n_steps = 3
+    start = 0.1
+    end = 0.3
+    middle = 0.2
+    beta = BetaSchedule(n_steps=n_steps, start=start, end=end)
+    assert len(beta) == n_steps
+    assert np.isclose(beta[0], start)
+    assert np.isclose(beta[1], middle)
+    assert np.isclose(beta[2], end)
