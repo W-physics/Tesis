@@ -9,10 +9,8 @@ def GetCorrelations(array):
     filtered = array[array[:,-1] < 0].T
 
     timesteps = len(filtered)
-    corr = np.zeros(timesteps)
     ndata = len(filtered[0])
 
-    for i in range(timesteps):
-        corr[i] = np.sum(filtered[i]**2) / ndata
+    corr = (filtered**2).mean(axis=1) - (filtered.mean(axis=1))**2
 
     return corr

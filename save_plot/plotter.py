@@ -1,4 +1,3 @@
-
 from backward_process.correlation import GetCorrelations
 from test.true_dynamics import TrueDynamics
 
@@ -13,22 +12,30 @@ def PlotCritical(timesteps, ndata):
 
     reduced_timesteps = np.arange(timesteps)/critical_time
 
-    fig, ax = plt.subplots()
-    ax.set_ylabel(r"$x_{s}$")
-    ax.set_xlabel(r"$s/s_c$")
-    ax.set_title("Trajectorie plot of critical time n = "+str(ndata))
+    fig, ax = plt.subplots(ncols=3, width_ratios=[1, 4, 1], sharey=True)
+    ax[0].set_ylabel(r"$x_{s}$")
+    ax[1].set_xlabel(r"$s/s_c$")
+    fig.suptitle("Trajectorie plot of critical time n = "+str(ndata))
+
 
     ncurves = 20
     distros = pd.read_csv("data/generated_data.csv", header=None).to_numpy()
+    hist1 = distros[0,:]
+    hist2 = distros[-1,:]
 
-    PlotSim(distros, reduced_timesteps, ax, ncurves)
+
+    ax[0].hist(hist1, bins=50, orientation='horizontal', density=True, color='b')
+    ax[0].invert_xaxis()
+    ax[2].hist(hist2, bins=50, orientation='horizontal', density=True, color='b')
+
+    PlotSim(distros, reduced_timesteps, ax[1], ncurves)
     #PlotTest(ax, timesteps, ndata, ncurves, critical_time)
     PlotCorrelations(distros, reduced_timesteps)
     #ax.legend()
 
     fig.savefig("figures/trajectories/n="+str(ndata)+".svg")
 
-    print(f"Violin plot of critical time n = {ndata} plotted and saved to figures/trajectories/n={ndata}.pdf")
+    print(f"Trajerctorie plot of critical time n = {ndata} plotted and saved to figures/trajectories/n={ndata}.pdf")
 
 def PlotSim(distros, reduced_timesteps, ax, ncurves):
 
@@ -36,7 +43,9 @@ def PlotSim(distros, reduced_timesteps, ax, ncurves):
 
     reduced_distros = distros[:,::ndata//ncurves]
 
-    ax.plot(reduced_timesteps,reduced_distros, c="b", alpha = 0.5, label="simulated")
+    for i in range(reduced_distros.shape[1]):
+
+        ax.scatter(reduced_timesteps, reduced_distros[:,i], c='b', alpha = 0.5, label="simulated", s=0.3)
 
 def PlotCorrelations(distros, reduced_timesteps):
 
@@ -47,7 +56,7 @@ def PlotCorrelations(distros, reduced_timesteps):
 
     ax2.set_ylabel(r"$D_{s}$")
     ax2.set_xlabel(r"$s/s_c$")
-    ax2.set_title("Correlations at n = "+str(ndata))
+    ax2.set_title("Correlations with n = "+str(ndata))
     ax2.plot(reduced_timesteps, correlations)
 
     fig2.savefig("figures/correlations/n="+str(ndata)+".svg")
