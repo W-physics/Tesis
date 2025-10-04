@@ -54,6 +54,8 @@ def TrainModel(timesteps, ndata, initial_distribution):
     features, noise = GenerateNoisedData(timesteps, ndata, initial_distribution)
 
     features = features.reshape(-1,2)
+    noise = noise.reshape(-1)
+    
     scaler = StandardScaler()
 
     features = scaler.fit_transform(features)
