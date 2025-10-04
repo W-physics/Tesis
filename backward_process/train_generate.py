@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 def TrainGenerate():
 
     ndata = 200
-    timesteps = 300
+    timesteps = 300 # 300 no es suficiente para que el estado final sea normal(0,1). Debe ser más de 1000.
     plt.style.use('bmh')
 
     Generate(GenerateTwoDeltas, timesteps, ndata)
