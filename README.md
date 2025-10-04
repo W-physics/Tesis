@@ -18,7 +18,3 @@ on questions concerning the relationship between data dimensionality and the
 number of spins in the Ising model, as well as the emergence of scaling-free
 properties. Furthermore, the development of new models is proposed to allow for
 a more detailed observation and analysis of these critical behaviors.
-
-### code info
-
-*two_deltas.ipynb* is a jupyter notebook that contains a feed forward neural network trained to reconstruct a two delta initial distribution from pure noise.
