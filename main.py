@@ -1,6 +1,7 @@
 from backward_process.generating import Generate
 from save_plot.plotter import PlotCritical
 from initial_distributions.two_deltas import GenerateTwoDeltas
+from initial_distributions.two_inequal_deltas import GenerateTwoInequalDeltas
 from neural_network.training_nn import TrainModel
 #from initial_distributions.six_deltas import GenerateSixDeltas
 
@@ -15,11 +16,11 @@ torch.set_default_device(device)
 
 
 def main():
-    ndata = 200
+    ndata = 300
     timesteps = 300
     plt.style.use('bmh')
 
-    #Generate(GenerateTwoDeltas, timesteps, ndata)
+    Generate(GenerateTwoInequalDeltas, timesteps, ndata)
     PlotCritical(timesteps, ndata)
 
 main()
