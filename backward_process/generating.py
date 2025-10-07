@@ -21,7 +21,9 @@ def Generate(initial_distribution, timesteps, ndata):
     distros = np.zeros((timesteps,ndata))
     distros[0] = np.random.normal(0, 1, ndata)
 
-    model, loss_hist_train, val_hist_train, scaler = TrainModel(timesteps, ndata, initial_distribution) 
+    train_steps = 1000
+
+    model, loss_hist_train, val_hist_train, scaler = TrainModel(train_steps, ndata, initial_distribution) 
 
     PlotTrainval(ndata, loss_hist_train, val_hist_train)
 

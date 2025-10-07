@@ -20,7 +20,7 @@ def main():
     timesteps = 300
     plt.style.use('bmh')
 
-    #Generate(GenerateTwoDeltas, timesteps, ndata)
+    Generate(GenerateTwoDeltas, timesteps, ndata)
     PlotCritical(timesteps, ndata)
 
 main()

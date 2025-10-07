@@ -9,7 +9,7 @@ import numpy as np
 
 def PlotCritical(timesteps, ndata):
 
-    critical_time = timesteps - 158
+    critical_time = 158
 
     reduced_timesteps = np.arange(timesteps)/critical_time
 

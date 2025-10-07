@@ -49,7 +49,7 @@ def ForwardProcess(timesteps, initial_data):
     """
     ndata = len(initial_data)
     features = np.zeros((ndata, timesteps,  2))
-    noises = np.random.normal(0,1,size=((ndata, timesteps),timesteps))
+    noises = np.random.normal(0,1,size=(ndata,timesteps))
     beta = BetaSchedule(timesteps)
     alpha = 1 - beta
     alpha_bar = np.cumprod(alpha)
@@ -61,7 +61,6 @@ def ForwardProcess(timesteps, initial_data):
     features[:,:,0] = noised_data
     features[:,:,1] = times
 
-    return  features, noises
     return  features, noises
 
 def GenerateNoisedData(timesteps, ndata, initial_distribution):
