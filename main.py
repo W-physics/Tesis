@@ -20,9 +20,7 @@ def main():
     timesteps = 300
     plt.style.use('bmh')
 
-    loss_hist_train, val_hist_train = TrainModel(1000, ndata, GenerateTwoDeltas) 
-
-    Generate(GenerateTwoDeltas, timesteps, ndata)
+    #Generate(GenerateTwoDeltas, timesteps, ndata)
     PlotCritical(timesteps, ndata)
 
 main()

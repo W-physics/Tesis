@@ -1,6 +1,5 @@
 import torch.nn as nn
 import torch
-from sklearn.preprocessing import StandardScaler
 
 class FeedForward(nn.Module):
 
@@ -23,10 +22,6 @@ class FeedForward(nn.Module):
     self.model_list = nn.ModuleList(l)
 
   def forward(self,x):
-
-    scaler = StandardScaler()
-
-    x = torch.tensor(scaler.fit_transform(x), dtype=torch.float32)
 
     for layer in self.model_list:
       x = layer(x)

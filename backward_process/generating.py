@@ -1,15 +1,13 @@
 import numpy as np
 import torch
-from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
 
 from forward_process.generate_noised_data import BetaSchedule
-from neural_network.neural_network import FeedForward
+from neural_network.training_nn import TrainModel
 
 from save_plot.save_files import SaveCSV
 
-device = torch.device(f'cuda:{torch.cuda.current_device()}') if torch.cuda.is_available() else 'cpu'
-
-def Generate(timesteps, ndata):
+def Generate(initial_distribution, timesteps, ndata):
 
     """
     Emulates the backward process of a diffusion model to generate data. The 
@@ -23,10 +21,11 @@ def Generate(timesteps, ndata):
     distros = np.zeros((timesteps,ndata))
     distros[0] = np.random.normal(0, 1, ndata)
 
-    model = FeedForward(input_size=2,output_size=1,n_hidden_layers=2,depht=200).to(device)
-    model.load_state_dict(torch.load('model/FeedForward.pth',weights_only=True))
+    train_steps = 1000
 
-    scaler = StandardScaler()
+    model, loss_hist_train, val_hist_train, scaler = TrainModel(train_steps, ndata, initial_distribution) 
+
+    PlotTrainval(ndata, loss_hist_train, val_hist_train)
 
     print("Backward process started...")
  
@@ -37,7 +36,7 @@ def Generate(timesteps, ndata):
         times = np.array(s).repeat(ndata)
         
         feat = np.vstack((distros[t-1], times)).T
-        scaled_feat = scaler.fit_transform(feat)
+        scaled_feat = scaler.transform(feat)
 
         features = torch.tensor(scaled_feat, dtype=torch.float32)
 
@@ -50,4 +49,23 @@ def Generate(timesteps, ndata):
 
     SaveCSV(distros, "generated_data")
 
+def PlotTrainval(ndata, loss_hist_train, loss_hist_valid):
+    """
+    Plots learning curves of training and validation sets
+    """
+
+    fig, ax = plt.subplots()
+
+    ax.set_xlabel("epochs")
+    ax.set_ylabel("MSE")
+    ax.set_ylim(0, max(loss_hist_train.max(), loss_hist_valid.max())) 
+    ax.set_title("Training and validation errors")
+
+    ax.plot(loss_hist_train,label='train')
+    ax.plot(loss_hist_valid,label='valid')
+    ax.legend(fontsize='large')
+
+    fig.savefig('figures/losses/'+str(ndata)+'.svg')
+
+    print(f"Training and validation losses plotted and saved to figures/losses/{ndata}.svg")
 
