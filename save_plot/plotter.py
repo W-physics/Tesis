@@ -1,6 +1,7 @@
 from backward_process.correlation import GetCorrelations
 from test.true_dynamics import TrueDynamics
-from backward_process.fitting import ExponentialFitting
+from save_plot.save_files import LoadCSV
+#from backward_process.fitting import ExponentialFitting
 
 
 import pandas as pd
@@ -20,8 +21,7 @@ def PlotCritical(timesteps, ndata):
 
 
     ncurves = 20
-    distros = pd.read_csv("data/generated_data.csv", header=None).to_numpy()
-
+    distros = LoadCSV("data/generated_data.csv")
     distros_c1 = distros[:, distros[-1,:] >= 0]
     distros_c2 = distros[:, distros[-1,:] < 0]
 
@@ -42,12 +42,12 @@ def PlotCritical(timesteps, ndata):
     PlotCorrelations(ax2, distros_c2, reduced_timesteps, color='g')
     #ax.legend()
 
-    exponent_steps = 10
-    c1_curves = distros_c1.shape[1]
-    exponent_distros = distros_c1[critical_time:,:].reshape(-1)
-    exponent_timesteps = np.tile(np.arange(len(distros_c1[critical_time:,:])), c1_curves)
+    #exponent_steps = 10
+    #c1_curves = distros_c1.shape[1]
+    #exponent_distros = distros_c1[critical_time:,:].reshape(-1)
+    #exponent_timesteps = np.tile(np.arange(len(distros_c1[critical_time:,:])), c1_curves)
 
-    exponent, sigma_exponent = ExponentialFitting(exponent_timesteps, exponent_distros)
+    #exponent, sigma_exponent = ExponentialFitting(exponent_timesteps, exponent_distros)
                                                   
 
     fig.savefig("figures/trajectories/n="+str(ndata)+".svg")

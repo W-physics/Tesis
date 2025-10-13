@@ -1,5 +1,7 @@
 #ignore all the csv files
 
+*.pth
+
 *.csv
 
 .venv
