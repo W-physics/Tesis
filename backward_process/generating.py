@@ -3,6 +3,7 @@ import torch
 import matplotlib.pyplot as plt
 
 from forward_process.generate_noised_data import BetaSchedule
+from neural_network.training_nn import TrainModel
 
 from save_plot.save_files import SaveCSV
 
@@ -22,9 +23,9 @@ def Generate(initial_distribution, timesteps, ndata):
 
     train_steps = 1000
 
-    #model, scaler =
+    model, loss_hist_train, val_hist_train, scaler = TrainModel(train_steps, ndata, initial_distribution) 
 
-    #PlotTrainval(ndata, loss_hist_train, val_hist_train)
+    PlotTrainval(ndata, loss_hist_train, val_hist_train)
 
     print("Backward process started...")
  
@@ -47,7 +48,6 @@ def Generate(initial_distribution, timesteps, ndata):
     SaveCSV(distros, "generated_data")
 
 def PlotTrainval(ndata, loss_hist_train, loss_hist_valid):
-    
     """
     Plots learning curves of training and validation sets
     """
@@ -65,5 +65,5 @@ def PlotTrainval(ndata, loss_hist_train, loss_hist_valid):
 
     fig.savefig('figures/losses/'+str(ndata)+'.svg')
 
-    print(f"Training and validation losses plotted and saved to figures/losses/{ndata/}.svg")
+    print(f"Training and validation losses plotted and saved to figures/losses/{ndata}.svg")
 
