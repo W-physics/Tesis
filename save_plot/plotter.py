@@ -98,6 +98,4 @@ def PlotTest(ax, timesteps, ndata, ncurves, critical_time):
 
     reduced_timesteps = np.arange(timesteps)/critical_time
 
-    PlotCorrelations(distros, reduced_timesteps)
-
     ax.plot(reduced_timesteps, reduced_distros, c="k", alpha = 0.5, label="true dynamics")

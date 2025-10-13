@@ -15,8 +15,9 @@ def TrueDynamics(timesteps, ndata):
 
     distros[0] = np.random.normal(0, 1, ndata)
     for t in range(1, timesteps):
-        beta = betas[t]
-        theta = Theta(t, betas)
+        s = timesteps - t
+        beta = betas[s]
+        theta = Theta(s, betas)
         delta = 1 - theta**2
         fraction = theta/delta 
         previous_distro = distros[t-1]
