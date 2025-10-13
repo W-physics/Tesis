@@ -86,7 +86,7 @@ def PlotHistograms(ax, distros):
     color = 'b' if hist2[0] >= 0 else 'g'
 
     ax[0].hist(hist0, bins=50, orientation='horizontal', density=True, color=color, alpha=0.5)
-    ax[2].hist(hist2, bins=50, orientation='horizontal', density=True, color=color, alpha=0.5)
+    ax[2].hist(hist2, bins=20, orientation='horizontal', density=True, color=color)
 
     ax[0].invert_xaxis()
 
