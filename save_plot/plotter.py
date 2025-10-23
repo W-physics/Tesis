@@ -27,6 +27,9 @@ def PlotCritical(timesteps, ndata):
     PlotHistograms(ax, distros_c2)
 
     PlotSim(distros, reduced_timesteps, ax[1], ncurves)
+
+    PlotMean(ax[1], distros_c1, reduced_timesteps)
+    PlotMean(ax[1], distros_c2, reduced_timesteps)
                                
     fig.savefig("figures/trajectories/"+name+".svg")
 
@@ -54,3 +57,9 @@ def PlotHistograms(ax, distros):
     ax[2].hist(hist2, bins=20, orientation='horizontal', density=True, color=color)
 
     ax[0].invert_xaxis()
+
+def PlotMean(ax, distro, reduced_timesteps):
+
+    means = np.mean(distro, axis=1)
+    color = 'b' if means[-1] >= 0 else 'g'
+    ax.plot(reduced_timesteps,means, c=color, ls='dashed')
