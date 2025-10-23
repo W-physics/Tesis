@@ -5,9 +5,7 @@ from initial_distributions.two_inequal_deltas import GenerateTwoInequalDeltas
 from neural_network.training_nn import TrainModel
 
 import matplotlib.pyplot as plt
-import torch
-
-torch.cuda.is_available()
+import torch 
 
 device = torch.device(f'cuda:{torch.cuda.current_device()}') if torch.cuda.is_available() else 'cpu'
 
@@ -15,11 +13,11 @@ torch.set_default_device(device)
 
 
 def main():
-    ndata = 300
+    ndata = 200
     timesteps = 300
     plt.style.use('bmh')
 
-    Generate(GenerateTwoInequalDeltas, timesteps, ndata)
+    Generate(GenerateTwoDeltas, timesteps, ndata)
     PlotCritical(timesteps, ndata)
 
 main()

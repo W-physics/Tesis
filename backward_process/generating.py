@@ -65,7 +65,3 @@ def PlotTrainval(ndata, loss_hist_train, loss_hist_valid):
     ax.plot(loss_hist_valid,label='valid')
     ax.legend(fontsize='large')
 
-    fig.savefig('figures/losses/'+str(ndata)+'.svg')
-
-    print(f"Training and validation losses plotted and saved to figures/losses/{ndata}.svg")
-

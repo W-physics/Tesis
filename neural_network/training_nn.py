@@ -84,6 +84,7 @@ def TrainModel(timesteps, ndata, initial_distribution):
     train_dl, valid_dl, test_feature, test_target = Preprocessing(features, noise)
 
 
+    print("Beginning training...")
 
     loss_hist_train, loss_hist_valid = Train(learning_rate=0.01, model=model, num_epochs=30,
                                            train_dl=train_dl, valid_dl=valid_dl
