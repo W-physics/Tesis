@@ -13,7 +13,7 @@ torch.set_default_device(device)
 
 
 def main():
-    ndata = 200
+    ndata = 10000
     timesteps = 300
     plt.style.use('bmh')
 
@@ -21,3 +21,5 @@ def main():
     PlotCritical(timesteps, ndata)
 
 main()
+
+print("Ended Successfully :)")
