@@ -1,19 +1,15 @@
 #!/bin/sh
 
-#SBATCH -p gpu  	# Cola para correr el job.  Especificar gpu partition/queue (required)
-#SBATCH --gres=gpu:1	# GPUs solicitadas (required), Default=1
-#SBATCH -N 1		# Nodos requeridos, Default=1
-#SBATCH -n 8		# Cores por nodo requeridos, Default=1
-#SBATCH --mem=16G  	# Memoria Virtual/RAM, Default=2048
-#SBATCH -t 10:00:00  	# Walltime 
-#SBATCH --mail-user=w.montano@uniandes.edu.co
-#SBATCH --mail-type=ALL
-#SBATCH --job-name=test-1GPU_8threads
-#SBATCH -o job_1GPU8threads.log  # Output filename
-host=`/bin/hostname`
-date=`/bin/date`
-echo "Corri el: "$date
-echo "Corri en la maquina: "$host
+SBATCH --job-name=Diffusion		#Nombre del job
+SBATCH -p short			#Cola a usar, Default=short (Ver colas y límites en /hpcfs/shared/README/partitions.txt)
+SBATCH -N 1				#Nodos requeridos, Default=1
+SBATCH -n 1				#Tasks paralelos, recomendado para MPI, Default=1
+SBATCH --cpus-per-task=8		#Cores requeridos por task, recomendado para multi-thread, Default=1
+SBATCH --mem=2000		#Memoria en Mb por CPU, Default=2048
+SBATCH --time=10:00:00			#Tiempo máximo de corrida, Default=2 horas
+SBATCH --mail-user=w.montano@uniandes.edu.co
+#SBATCH --mail-type=ALL			
+SBATCH -o TEST_job.o%j			#Nombre de archivo de salida
 
 eval "$(micromamba shell hook --shell bash)"
 

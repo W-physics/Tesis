@@ -1,13 +1,12 @@
 import numpy as np
-import torch
 import matplotlib.pyplot as plt
 
 from forward_process.generate_noised_data import BetaSchedule
-from neural_network.training_nn import TrainModel
+
 
 from save_plot.save_files import SaveCSV
 
-def Generate(initial_distribution, timesteps, ndata):
+def Generate(repetitions, timesteps, ndata, model, scaler):
 
     """
     Emulates the backward process of a diffusion model to generate data. The 
@@ -21,31 +20,31 @@ def Generate(initial_distribution, timesteps, ndata):
     distros = np.zeros((timesteps,ndata))
     distros[0] = np.random.normal(0, 1, ndata)
 
-    train_steps = 1000
-
-    model, loss_hist_train, val_hist_train, scaler = TrainModel(train_steps, ndata, initial_distribution) 
-
-    PlotTrainval(ndata, loss_hist_train, val_hist_train)
-
     print("Backward process started...")
  
-    for t in range(1,timesteps):
-        
-        s = timesteps - t
+    distros = np.zeros((repetitions, timesteps, ndata))
+    distros[:, 0, :] = np.random.normal(0, 1, (repetitions, ndata))  # condiciones iniciales
 
-        times = np.array(s).repeat(ndata)
-        
-        feat = np.vstack((distros[t-1], times)).T
+    for t in range(1, timesteps):
+        s = timesteps - t
+        times = np.full((repetitions, ndata), s)
+
+        # Construimos las features en bloque
+        feat = np.stack((distros[:, t-1, :], times), axis=-1).reshape(-1, 2)
         scaled_feat = scaler.transform(feat)
 
         features = torch.tensor(scaled_feat, dtype=torch.float32)
-
         guessed_noise = model(features).detach().numpy().flatten()
+        guessed_noise = guessed_noise.reshape(repetitions, ndata)
 
-        beta_hat = beta[s] * (1 - np.prod(alpha[:s-1]))/(1 - np.prod(alpha[:s]))
-        noise =  np.sqrt(beta_hat) * np.random.normal(0,1,ndata)
-        
-        distros[t] = 1/np.sqrt(alpha[s]) * (distros[t-1] - guessed_noise* beta[s]/(np.sqrt(1 - np.prod(alpha[:s]))) ) + noise
+        beta_hat = beta[s] * (1 - np.prod(alpha[:s-1])) / (1 - np.prod(alpha[:s]))
+        noise = np.sqrt(beta_hat) * np.random.normal(0, 1, (repetitions, ndata))
+
+        distros[:, t, :] = (
+            1 / np.sqrt(alpha[s])
+            * (distros[:, t-1, :] - guessed_noise * beta[s] / np.sqrt(1 - np.prod(alpha[:s])))
+            + noise
+        )
 
     SaveCSV(distros, "generated_data")
 

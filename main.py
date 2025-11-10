@@ -13,12 +13,17 @@ torch.set_default_device(device)
 
 
 def main():
+
+    repetitions = 100
     ndata = 10000
     timesteps = 300
     plt.style.use('bmh')
 
-    #Generate(GenerateTwoDeltas, timesteps, ndata)
-    PlotCritical(timesteps, ndata)
+    train_steps = 1000
+    model, loss_hist_train, val_hist_train, scaler = TrainModel(train_steps, ndata, initial_distribution=GenerateTwoDeltas)
+     
+    Generate(repetitions, timesteps, ndata, model=model, scaler=scaler)
+    PlotCritical(repetitions, timesteps, ndata)
 
 main()
 
