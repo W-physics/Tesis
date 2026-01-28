@@ -16,7 +16,7 @@ def main():
 
     repetitions = 100
     ndata = 10000
-    timesteps = 300
+    timesteps = 1000
     plt.style.use('bmh')
 
     train_steps = 1000
