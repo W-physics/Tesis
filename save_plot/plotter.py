@@ -31,7 +31,7 @@ def PlotCritical(timesteps, ndata):
     PlotMean(ax[1], distros_c1, reduced_timesteps)
     PlotMean(ax[1], distros_c2, reduced_timesteps)
                                
-    fig.savefig("figures/trajectories/"+name+".svg")
+    #fig.savefig("figures/trajectories/"+name+".svg")
 
 
 def PlotSim(distros, reduced_timesteps, ax, ncurves):

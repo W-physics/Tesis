@@ -96,7 +96,7 @@ def TrainModel(timesteps, ndata, initial_distribution):
 
     test_loss = loss_fn(pred, test_target).item()
 
-    print(f'test error:  {test_loss}')
+    torch.save(model.state_dict(), 'model.pth')
 
-    return model, loss_hist_train, loss_hist_valid, scaler
+    return loss_hist_train, loss_hist_valid, scaler, test_loss
 
