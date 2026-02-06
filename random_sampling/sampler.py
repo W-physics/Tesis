@@ -16,7 +16,7 @@ except ImportError:
     from scipy.integrate import simps
 
 
-def MakeSampler(pdf, range=(-25, 25), bins=1_000_000):
+def MakeSampler(pdf, range=(-2*np.pi, 2*np.pi), bins=1_000_000):
     """Generates a sampler of random samples distributed with pdf
     using the inverse transform sampling method.
 

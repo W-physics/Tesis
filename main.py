@@ -1,9 +1,10 @@
 from backward_process.generating import Generate
 from save_plot.plotter import PlotCritical
 from initial_distributions.two_deltas import GenerateTwoDeltas
-from initial_distributions.two_inequal_deltas import GenerateTwoInequalDeltas
+from initial_distributions.two_unequal_deltas import GenerateTwoUnequalDeltas
 from neural_network.training_nn import TrainModel
 from neural_network.neural_network import FeedForward
+from initial_distributions.subclases import GenerateSubclasses
 
 import matplotlib.pyplot as plt
 import torch 
@@ -29,7 +30,7 @@ def main():
 
     Generate(repetitions, timesteps, ndata, model=model, scaler=scaler)
     PlotCritical(repetitions, timesteps, ndata)
-
+    
 main()
 
 print("Ended Successfully :)")
