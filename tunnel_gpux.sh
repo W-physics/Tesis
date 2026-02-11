@@ -1,19 +1,17 @@
 #!/bin/bash
 
-SBATCH --output="tunnel_log/tunnel_gpux-%J.log"
-SBATCH --job-name="tunnel_gpux"
-SBATCH -p gpu          # Cola para correr el job.  Especificar gpu partition/queue (required)
-SBATCH --gres=gpu:1    # GPUs solicitadas (required), Default=1
-SBATCH -N 1            # Nodos requeridos, Default=1
-SBATCH -n 1            # Cores por nodo requeridos, Default=1
-SBATCH --mem=24G       # Memoria Virtual/RAM
-SBATCH --time 15-00:00:00
+#SBATCH --output="tunnel_log/tunnel_gpux-%J.log"
+#SBATCH --job-name="tunnel_gpux"
+#SBATCH -p gpu          # Cola para correr el job.  Especificar gpu partition/queue (required)
+#SBATCH --gres=gpu:1    # GPUs solicitadas (required), Default=1
+#SBATCH -N 1            # Nodos requeridos, Default=1
+#SBATCH -n 1            # Cores por nodo requeridos, Default=1
+#SBATCH --mem=24G       # Memoria Virtual/RAM
+#SBATCH --time 15-00:00:00
 
 # activate environment
 
-eval "$(micromamba shell hook --shell bash)"
-
-micromamba activate William
+module load python/3.11
 
 # find open port
 PORT=$(python -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')

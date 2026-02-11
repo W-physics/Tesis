@@ -7,9 +7,7 @@
 #SBATCH --cpus-per-task=12
 #SBATCH --time 2-00:00:00
 
-eval "$(micromamba shell hook --shell bash)"
-
-micromamba activate William
+module load python/3.11
 
 # find open port
 PORT=$(python -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()')
