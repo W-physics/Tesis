@@ -5,9 +5,9 @@ from sklearn.preprocessing import StandardScaler
 
 torch.cuda.is_available()
 
-device = torch.device(f'cuda:{torch.cuda.current_device()}') if torch.cuda.is_available() else 'cpu'
+#device = torch.device(f'cuda:{torch.cuda.current_device()}') if torch.cuda.is_available() else 'cpu'
 
-torch.set_default_device(device)
+#torch.set_default_device(device)
 
 from neural_network.neural_network import FeedForward
 #from neural_network.neural_network import ConvNet
@@ -70,7 +70,7 @@ def ValStep(model, x_batch, y_batch, loss_fn):
 
 def TrainModel(timesteps, ndata, initial_distribution):
 
-    model = FeedForward(input_size=2,output_size=1,n_hidden_layers=2,depht=200).to(device)
+    model = FeedForward(input_size=2,output_size=1,n_hidden_layers=2,depht=200)
 
     features, noise = GenerateNoisedData(timesteps, ndata, initial_distribution)
 
