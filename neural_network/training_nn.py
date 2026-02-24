@@ -68,11 +68,11 @@ def ValStep(model, x_batch, y_batch, loss_fn):
 
    return val_loss.item()
 
-def TrainModel(timesteps, ndata, initial_distribution):
+def TrainModel(timesteps, ndata, initial_distribution, c):
 
     model = FeedForward(input_size=2,output_size=1,n_hidden_layers=2,depht=200)
 
-    features, noise = GenerateNoisedData(timesteps, ndata, initial_distribution)
+    features, noise = GenerateNoisedData(timesteps, ndata, initial_distribution,c)
 
     features = features.reshape(-1,2)
     noise = noise.reshape(-1)
@@ -96,7 +96,7 @@ def TrainModel(timesteps, ndata, initial_distribution):
 
     test_loss = loss_fn(pred, test_target).item()
 
-    torch.save(model.state_dict(), 'model.pth')
+    torch.save(model.state_dict(), 'model'+str(initial_distribution)+str(ndata)+'.pth')
 
     return loss_hist_train, loss_hist_valid, scaler, test_loss
 

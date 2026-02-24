@@ -63,8 +63,8 @@ def ForwardProcess(timesteps, initial_data):
 
     return  features, noises
 
-def GenerateNoisedData(timesteps, ndata, initial_distribution):
+def GenerateNoisedData(timesteps, ndata, initial_distribution, c):
 
-    data = initial_distribution(ndata)
+    data = initial_distribution(ndata, c)
     
     return ForwardProcess(timesteps, data)
