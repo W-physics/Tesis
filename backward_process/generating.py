@@ -7,7 +7,7 @@ from forward_process.generate_noised_data import BetaSchedule
 
 from save_plot.save_files import SaveCSV
 
-def Generate(timesteps, ndata, model, scaler, exponent):
+def Generate(timesteps, ndata, model, scaler, exponent, repetition):
 
     """
     Emulates the backward process of a diffusion model to generate data. The 
@@ -44,7 +44,7 @@ def Generate(timesteps, ndata, model, scaler, exponent):
             + noise
         )
 
-    SaveCSV(distros, "generated_data"+str(ndata)+'_c='+str(exponent))
+    SaveCSV(distros, "n="+str(ndata)+'_c='+str(exponent)+'_m='+str(repetition))
 
 def PlotTrainval(ndata, loss_hist_train, loss_hist_valid):
     """
