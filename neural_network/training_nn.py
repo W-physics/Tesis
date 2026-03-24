@@ -98,5 +98,5 @@ def TrainModel(timesteps, ndata, initial_distribution, c):
 
     torch.save(model.state_dict(), 'models/n='+str(ndata)+'_c='+str(c)+'.pth')
 
-    return loss_hist_train, loss_hist_valid, scaler, test_loss
+    return scaler, test_loss
 

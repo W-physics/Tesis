@@ -18,10 +18,7 @@ def TrainAndGenerateDatasets(ndata, repetitions):
 
     for exponent in list_c:
 
-        loss_hist_train, val_hist_train, scaler, test_loss = TrainModel(timesteps, 
-                                                                ndata,
-                                                                initial_distribution,
-                                                                exponent)
+        scaler, test_loss = TrainModel(timesteps, ndata, initial_distribution, exponent)
         
         print(f'test loss = {test_loss}')
 
