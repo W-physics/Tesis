@@ -20,9 +20,7 @@ def Generate(timesteps, ndata, model, scaler, exponent, repetition):
 
     distros = np.zeros((timesteps, ndata))
     distros[0] = np.random.normal(0, 1, ndata)
-
-    print("Backward process started...")
-    
+        
     for t in range(1, timesteps):
         s = timesteps - t
         times = np.full(ndata, s)

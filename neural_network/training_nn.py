@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import numpy as np
 from sklearn.preprocessing import StandardScaler
+import pickle
 
 torch.cuda.is_available()
 
@@ -98,5 +99,8 @@ def TrainModel(timesteps, ndata, initial_distribution, c):
 
     torch.save(model.state_dict(), 'models/n='+str(ndata)+'_c='+str(c)+'.pth')
 
-    return scaler, test_loss
+    with open('models/scaler_file.pkl','wb') as f:
+        pickle.dump(scaler, f)
+
+    return test_loss
 
