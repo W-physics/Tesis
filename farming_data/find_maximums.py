@@ -12,7 +12,7 @@ def FindMaximumOfGenerations(ndata, repetitions):
 
     h = 0.01
 
-    list_c = [0,0+h]
+    list_c = [-h,h]
     
     distros = [
         [

@@ -7,6 +7,7 @@ import numpy as np
 def main():
 
     ndata_list = np.arange(start=20000, stop=31000, step=1000)
+    #ndata_list = np.arange(start=100, stop=200, step=10)
 
     for i in range(len(ndata_list)):
 
@@ -18,7 +19,7 @@ def main():
             
             train = False
 
-        repetitions = 10
+        repetitions = 2
 
         TrainAndGenerateDatasets(ndata_list[i], repetitions, train)
 

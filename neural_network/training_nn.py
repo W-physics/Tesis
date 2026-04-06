@@ -97,7 +97,7 @@ def TrainModel(timesteps, ndata, initial_distribution, c):
 
     test_loss = loss_fn(pred, test_target).item()
 
-    torch.save(model.state_dict(), 'models/n='+str(ndata)+'_c='+str(c)+'.pth')
+    torch.save(model.state_dict(), 'models/c='+str(c)+'.pth')
 
     with open('models/scaler_file.pkl','wb') as f:
         pickle.dump(scaler, f)

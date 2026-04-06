@@ -22,11 +22,11 @@ def TrainAndGenerateDatasets(ndata, repetitions, train):
             TrainModel(timesteps, ndata, initial_distribution, exponent)
 
 
-        with open('models/scaler_file.pkl', 'wb') as f:
+        with open('models/scaler_file.pkl', 'rb') as f:
             scaler = pickle.load(f)
         
         model = FeedForward(input_size=2,output_size=1,n_hidden_layers=2,depht=200)
-        state_dict = torch.load('models/n='+str(ndata)+'_c='+str(exponent)+'.pth')
+        state_dict = torch.load('models/c='+str(exponent)+'.pth')
         model.load_state_dict(state_dict)
         model.eval();
 

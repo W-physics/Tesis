@@ -42,7 +42,7 @@ def Generate(timesteps, ndata, model, scaler, exponent, repetition):
             + noise
         )
 
-    SaveCSV(distros, "n="+str(ndata)+'_c='+str(exponent)+'_m='+str(repetition))
+    SaveCSV(distros, f'n={ndata}_c={exponent}_m={repetition}')
 
 def PlotTrainval(ndata, loss_hist_train, loss_hist_valid):
     """
