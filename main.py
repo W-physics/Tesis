@@ -11,17 +11,9 @@ def main():
 
     for i in range(len(ndata_list)):
 
-        if i == 0:
+        repetitions = 10
 
-            train = True
-
-        else:
-            
-            train = False
-
-        repetitions = 2
-
-        TrainAndGenerateDatasets(ndata_list[i], repetitions, train)
+        TrainAndGenerateDatasets(ndata_list[i], repetitions, False)
 
         FindMaximumOfGenerations(ndata_list[i], repetitions)
     

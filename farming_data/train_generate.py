@@ -4,7 +4,7 @@ from neural_network.training_nn import TrainModel
 from neural_network.neural_network import FeedForward
 
 import pickle
-import torch
+import torch   
 
 def TrainAndGenerateDatasets(ndata, repetitions, train):
 
