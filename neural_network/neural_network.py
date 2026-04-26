@@ -26,4 +26,4 @@ class FeedForward(nn.Module):
     for layer in self.model_list:
       x = layer(x)
       
-    return x.view(-1)
+    return x

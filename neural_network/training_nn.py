@@ -82,7 +82,7 @@ def ValStep(model, x_batch, y_batch, loss_fn):
 
 def TrainModel(timesteps, ndata, dimension, initial_distribution, c):
 
-    model = FeedForward(input_size=dimension+1,output_size=dimension,n_hidden_layers=2,depht=200)
+    model = FeedForward(input_size=dimension+1,output_size=dimension, n_hidden_layers=2,depht=200)
     scaler = StandardScaler()
 
     distros, times, noise = GenerateNoisedData(timesteps, ndata, dimension, initial_distribution, c)
