@@ -6,23 +6,19 @@ from initial_distributions import GaussianMixture
 
 import torch   
 
-def TrainAndGenerateDatasets(ndata, dimension):
+def TrainAndGenerateDatasets(ndata, dimension, c):
 
     timesteps = 1000
-
-    h = 0.01
-
     initial_distribution=GaussianMixture
 
-    list_c = [-h,h]
-
-    for exponent in list_c:
-
-        test_loss, scaler = TrainModel(timesteps, ndata, dimension, initial_distribution, exponent)
+    test_loss, scaler = TrainModel(timesteps, ndata, dimension, initial_distribution, c=c)
         
-        model = FeedForward(input_size=dimension+1, output_size=dimension, n_hidden_layers=2, depht=200)
-        state_dict = torch.load(f'models/c={exponent}-d={dimension}.pth')
-        model.load_state_dict(state_dict)
-        model.eval();
+    model = FeedForward(input_size=dimension+1, output_size=dimension, n_hidden_layers=2, depht=200)
+    state_dict = torch.load(f'models/c={c}-d={dimension}.pth')
+    model.load_state_dict(state_dict)
+    model.eval();
         
-        distros = Generate(timesteps, ndata, dimension, model=model, scaler=scaler, exponent=exponent)
+    distros = Generate(timesteps, ndata, dimension, model=model, scaler=scaler)
+
+    return distros
+

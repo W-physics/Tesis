@@ -4,11 +4,15 @@ import pandas as pd
 
 from save_plot.save_files import SaveCSV
 
-def FindMaximumOfGenerations(distros, ndata, repetitions):
+def FindMaximumOfGenerations(distros, dimension, repetitions, c):
 
     timesteps = 1000
 
     x = np.linspace(0,2,1000)
+
+    h = 0.01
+
+    list_c = [-h,h]
 
     xmax = np.zeros((repetitions, 2, timesteps))
 
@@ -25,5 +29,5 @@ def FindMaximumOfGenerations(distros, ndata, repetitions):
     average_maximums = np.average(xmax, axis=0)
     standard_error_maximums = np.std(xmax, axis=0) / np.sqrt(repetitions)
 
-    SaveCSV(average_maximums, f'AM_n={ndata}')
-    SaveCSV(standard_error_maximums, f'SE_n={ndata}')
+    SaveCSV(average_maximums, f'AM_d={dimension}_c={c}')
+    SaveCSV(standard_error_maximums, f'SE_d={dimension}_c={c}')
