@@ -6,16 +6,10 @@ import numpy as np
 
 def main():
 
-    ndata_list = np.arange(start=20000, stop=31000, step=1000)
-    #ndata_list = np.arange(start=100, stop=200, step=10)
+    ndata=10000
+    dimension = 1
 
-    for i in range(len(ndata_list)):
-
-        repetitions = 10
-
-        TrainAndGenerateDatasets(ndata_list[i], repetitions, False)
-
-        FindMaximumOfGenerations(ndata_list[i], repetitions)
+    TrainAndGenerateDatasets(ndata, dimension)
     
 main()
 

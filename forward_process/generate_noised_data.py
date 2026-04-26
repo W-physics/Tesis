@@ -6,65 +6,35 @@ def BetaSchedule(n_steps, start=1e-4, end=0.02):
     """
     return np.linspace(start, end, n_steps)
 
-def ForwardProcessOriginal_no_optimizada(timesteps, initial_data):
-    
-    """
-    Generates noised data using the forward process. Takes one random timestep
-    generate a 1D noised data and store it in the noised_data array. This is repeated
-    for each data point in the initial_data array.
-    """
-    ndata = len(initial_data)
-    features = np.zeros((ndata, timesteps,  2))
-    noises = np.random.normal(0,1,size=((ndata,timesteps), timesteps))
+
+def ForwardProcess(timesteps, ndata, dimension, initial_data):
+
+    distros = np.zeros((ndata, dimension, timesteps))
+
+    # Ruido independiente para cada dato
+    noises = np.random.normal(0, 1, size=(ndata, dimension, timesteps))
+
     beta = BetaSchedule(timesteps)
     alpha = 1 - beta
     alpha_bar = np.cumprod(alpha)
-    alpha_bar = np.cumprod(alpha)
+
     times = np.arange(timesteps)
 
-    # TO DO: optimizar: esto se puede hacer más rápidosin dos loops
-    for i in range(ndata):
+    # Expandimos dimensiones para broadcasting correcto
+    alpha_bar = alpha_bar[None, None, :]          # (1,1,T)
+    initial_data = initial_data[:, :, None]       # (N,D,1)
 
+    noised_data = (
+        initial_data * np.sqrt(alpha_bar) +
+        np.sqrt(1 - alpha_bar) * noises
+    )
 
-        # Codigo no optimizado
-        for j in range(timesteps):
-            noise = noises[i,j]
-            noise = noises[i,j]
-            time = times[j]
-            noised_data = initial_data[i] * np.sqrt(alpha_bar[time]) + np.sqrt(1 - alpha_bar[time])*noise
-            noised_data = initial_data[i]*np.sqrt(alpha_bar[time]) + np.sqrt((1 - alpha_bar[time]))*noise
-            # Error inicial: la desviación estándar del ruido es sqrt(1 - alpha_bar y no 1-alpha_bar
-            # noised_data = initial_data[i]*np.sqrt(alpha_bar[time]) + (1 - alpha_bar[time])*noise
-            features[i,j] = noised_data, time
+    distros[:, :, :] = noised_data
 
+    return distros, times, noises
 
-    return  features, noises
+def GenerateNoisedData(timesteps, ndata, dimension, initial_distribution, c):
 
-def ForwardProcess(timesteps, initial_data):
+    data = initial_distribution(ndata, dimension, c)
     
-    """
-    Generates noised data using the forward process. Takes one random timestep
-    generate a 1D noised data and store it in the noised_data array. This is repeated
-    for each data point in the initial_data array.
-    """
-    ndata = len(initial_data)
-    features = np.zeros((ndata, timesteps,  2))
-    noises = np.random.normal(0,1,size=(ndata,timesteps))
-    beta = BetaSchedule(timesteps)
-    alpha = 1 - beta
-    alpha_bar = np.cumprod(alpha)
-    alpha_bar = np.cumprod(alpha)
-    times = np.arange(timesteps)
-
-    # Versión optimizada con broadcast de numpy en vez de hacer loops i, j
-    noised_data = initial_data[:, None]*np.sqrt(alpha_bar) + np.sqrt((1 - alpha_bar))*noises
-    features[:,:,0] = noised_data
-    features[:,:,1] = times
-
-    return  features, noises
-
-def GenerateNoisedData(timesteps, ndata, initial_distribution, c):
-
-    data = initial_distribution(ndata, c)
-    
-    return ForwardProcess(timesteps, data)
+    return ForwardProcess(timesteps, ndata, dimension, data)

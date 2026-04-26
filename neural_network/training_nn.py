@@ -6,15 +6,26 @@ import pickle
 
 torch.cuda.is_available()
 
-#device = torch.device(f'cuda:{torch.cuda.current_device()}') if torch.cuda.is_available() else 'cpu'
-
-#torch.set_default_device(device)
-
 from neural_network.neural_network import FeedForward
-#from neural_network.neural_network import ConvNet
 from forward_process.generate_noised_data import GenerateNoisedData
 from neural_network.preprocessing import Preprocessing
 from save_plot.save_files import SaveCSV
+
+def flatten_nt(A):
+    return A.transpose(0, 2, 1).reshape(-1, A.shape[1])
+
+def append_time_channel(A, b):
+
+    # Expandir b → (1,1,t)
+    b_expanded = b[None, None, :]
+
+    # Broadcast a (n,1,t)
+    b_expanded = np.broadcast_to(b_expanded, (A.shape[0], 1, A.shape[2]))
+
+    # Concatenar en eje de dimensión
+    result = np.concatenate([A, b_expanded], axis=1)
+
+    return flatten_nt(result)
 
 def Train(learning_rate, model, num_epochs, train_dl, valid_dl):
 
@@ -69,20 +80,17 @@ def ValStep(model, x_batch, y_batch, loss_fn):
 
    return val_loss.item()
 
-def TrainModel(timesteps, ndata, initial_distribution, c):
+def TrainModel(timesteps, ndata, dimension, initial_distribution, c):
 
-    model = FeedForward(input_size=2,output_size=1,n_hidden_layers=2,depht=200)
-
-    features, noise = GenerateNoisedData(timesteps, ndata, initial_distribution,c)
-
-    features = features.reshape(-1,2)
-    noise = noise.reshape(-1)
-    
+    model = FeedForward(input_size=dimension+1,output_size=dimension,n_hidden_layers=2,depht=200)
     scaler = StandardScaler()
 
+    distros, times, noise = GenerateNoisedData(timesteps, ndata, dimension, initial_distribution, c)
+    features = append_time_channel(distros, times)
+    targets = flatten_nt(noise)
     features = scaler.fit_transform(features)
 
-    train_dl, valid_dl, test_feature, test_target = Preprocessing(features, noise)
+    train_dl, valid_dl, test_feature, test_target = Preprocessing(features, targets)
 
 
     print("Beginning training...")
@@ -102,5 +110,5 @@ def TrainModel(timesteps, ndata, initial_distribution, c):
     with open('models/scaler_file.pkl','wb') as f:
         pickle.dump(scaler, f)
 
-    return test_loss
+    return test_loss, scaler
 

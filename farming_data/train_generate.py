@@ -2,31 +2,26 @@ from backward_process.generating import Generate
 from initial_distributions.two_unequal_deltas import GenerateTwoUnequalDeltas
 from neural_network.training_nn import TrainModel
 from neural_network.neural_network import FeedForward
+from initial_distributions import GaussianMixture   
 
-import pickle
 import torch   
 
-def TrainAndGenerateDatasets(ndata, repetitions, train):
+def TrainAndGenerateDatasets(ndata, dimension):
 
     timesteps = 1000
 
     h = 0.01
 
-    initial_distribution=GenerateTwoUnequalDeltas
+    initial_distribution=GaussianMixture
 
     list_c = [-h,h]
 
     for exponent in list_c:
 
-        if train:
-            TrainModel(timesteps, ndata, initial_distribution, exponent)
-
-
-        with open('models/scaler_file.pkl', 'rb') as f:
-            scaler = pickle.load(f)
+        test_loss, scaler = TrainModel(timesteps, ndata, dimension, initial_distribution, exponent)
         
         model = FeedForward(input_size=2,output_size=1,n_hidden_layers=2,depht=200)
-        state_dict = torch.load('models/c='+str(exponent)+'.pth')
+        state_dict = torch.load('models/'.pth')
         model.load_state_dict(state_dict)
         model.eval();
 
