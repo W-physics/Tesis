@@ -6,8 +6,8 @@ import numpy as np
 
 def main():
 
-    ndata=10000
-    dimension = 1
+    ndata=100
+    dimension = 3
 
     TrainAndGenerateDatasets(ndata, dimension)
     

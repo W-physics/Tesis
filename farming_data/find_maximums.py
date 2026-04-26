@@ -4,23 +4,11 @@ import pandas as pd
 
 from save_plot.save_files import SaveCSV
 
-def FindMaximumOfGenerations(ndata, repetitions):
+def FindMaximumOfGenerations(distros, ndata, repetitions):
 
     timesteps = 1000
 
     x = np.linspace(0,2,1000)
-
-    h = 0.01
-
-    list_c = [-h,h]
-    
-    distros = [
-        [
-            pd.read_csv(f'data/n={ndata}_c={c}_m={m}.csv', header=None).to_numpy()
-            for c in list_c
-        ]
-        for m in range(repetitions)
-    ]    
 
     xmax = np.zeros((repetitions, 2, timesteps))
 

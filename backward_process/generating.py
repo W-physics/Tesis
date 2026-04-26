@@ -7,7 +7,46 @@ from forward_process.generate_noised_data import BetaSchedule
 
 from save_plot.save_files import SaveCSV
 
-def Generate(timesteps, ndata, model, scaler, exponent, repetition):
+def Generate(timesteps, ndata, dimension, model, scaler):
+
+    beta = BetaSchedule(timesteps)
+    alpha = 1 - beta
+
+    distros = np.zeros((timesteps, ndata, dimension))
+
+    distros[0] = np.random.normal(0, 1, (ndata, dimension))
+
+    for t in range(1, timesteps):
+
+        s = timesteps - t
+
+        times = np.full((ndata, 1), s)
+
+        feat = np.concatenate([distros[t-1], times], axis=1)
+
+        scaled_feat = scaler.transform(feat)
+
+        features = torch.tensor(scaled_feat, dtype=torch.float32)
+
+        guessed_noise = model(features).detach().numpy()
+
+        beta_hat = beta[s] * (1 - np.prod(alpha[:s-1])) / (1 - np.prod(alpha[:s]))
+
+        noise = np.sqrt(beta_hat) * np.random.normal(0, 1, (ndata, dimension))
+
+        distros[t] = (
+            1 / np.sqrt(alpha[s])
+            * (
+                distros[t-1]
+                - (beta[s] / np.sqrt(1 - np.prod(alpha[:s]))) * guessed_noise
+            )
+            + noise
+        )
+
+    return distros
+
+'''
+def Generate(timesteps, ndata, dimension, model, scaler, exponent, repetition):
 
     """
     Emulates the backward process of a diffusion model to generate data. The 
@@ -18,7 +57,7 @@ def Generate(timesteps, ndata, model, scaler, exponent, repetition):
     beta = BetaSchedule(timesteps)
     alpha = 1 - beta
 
-    distros = np.zeros((timesteps, ndata))
+    distros = np.zeros((timesteps, ndata, dimension))
     distros[0] = np.random.normal(0, 1, ndata)
         
     for t in range(1, timesteps):
@@ -42,7 +81,9 @@ def Generate(timesteps, ndata, model, scaler, exponent, repetition):
             + noise
         )
 
-    SaveCSV(distros, f'n={ndata}_c={exponent}_m={repetition}')
+    SaveCSV(distros, f'd={dimension}_c={exponent}')
+
+'''
 
 def PlotTrainval(ndata, loss_hist_train, loss_hist_valid):
     """

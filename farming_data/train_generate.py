@@ -20,11 +20,9 @@ def TrainAndGenerateDatasets(ndata, dimension):
 
         test_loss, scaler = TrainModel(timesteps, ndata, dimension, initial_distribution, exponent)
         
-        model = FeedForward(input_size=2,output_size=1,n_hidden_layers=2,depht=200)
-        state_dict = torch.load('models/'.pth')
+        model = FeedForward(input_size=dimension+1, output_size=dimension, n_hidden_layers=2, depht=200)
+        state_dict = torch.load(f'models/c={exponent}-d={dimension}.pth')
         model.load_state_dict(state_dict)
         model.eval();
-
-        for m in range(repetitions):
-
-            Generate(timesteps, ndata, model=model, scaler=scaler, exponent=exponent, repetition=m)
+        
+        distros = Generate(timesteps, ndata, dimension, model=model, scaler=scaler, exponent=exponent)
