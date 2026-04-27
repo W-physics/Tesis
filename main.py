@@ -23,8 +23,8 @@ def main():
                                   timesteps=1000,
                                   dimension=d)
             
-            SaveCSV(projections, f'projetions_d={d}_c={c}')
-            FindMaximumOfGenerations(projections, dimension=d, c=c, repetitions=1)
+            SaveCSV(projections, f'projections_d={d}_c={c}')
+            #FindMaximumOfGenerations(projections, dimension=d, c=c, repetitions=1)
     
 main()
 

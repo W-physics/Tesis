@@ -30,7 +30,4 @@ def Project(distros, timesteps, ndata, dimension):
     # resultado: (timesteps, ndata)
     projections = np.tensordot(distros, normalized_unity, axes=([2], [0]))
 
-    # norma de la proyección
-    positions = np.abs(projections)
-
-    return positions
+    return projections
