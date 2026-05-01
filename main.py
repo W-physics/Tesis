@@ -9,7 +9,7 @@ import numpy as np
 def main():
 
     h = 0.01
-    ndata = 10000
+    ndata = 10
     list_c = [-h,0,h]
     dimensions = np.arange(start=1, stop=10, step=1)
 
